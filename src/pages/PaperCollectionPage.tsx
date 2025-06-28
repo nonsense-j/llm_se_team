@@ -26,25 +26,48 @@ export const PaperCollectionPage: React.FC = () => {
     return matchesCategory && matchesSearch && matchesYear;
   });
 
-  // Group papers by categories for positioning
-  const getPositionForPaper = (paper: Paper, index: number, total: number) => {
-    // Create clusters based on categories
-    const categoryHash = paper.categories.join('').split('').reduce((a, b) => {
-      a = ((a << 5) - a) + b.charCodeAt(0);
-      return a & a;
-    }, 0);
+  // Calculate year distribution for width allocation
+  const yearDistribution = useMemo(() => {
+    const distribution = new Map<number, number>();
+    filteredPapers.forEach(paper => {
+      distribution.set(paper.year, (distribution.get(paper.year) || 0) + 1);
+    });
     
-    const clusterX = 30 + (Math.abs(categoryHash) % 40);
-    const clusterY = 30 + (Math.abs(categoryHash >> 8) % 40);
+    const totalPapers = filteredPapers.length;
+    const years = Array.from(distribution.keys()).sort();
+    const yearData = years.map(year => ({
+      year,
+      count: distribution.get(year) || 0,
+      width: totalPapers > 0 ? Math.max(8, (distribution.get(year) || 0) / totalPapers * 80) : 12.5
+    }));
     
-    // Add some randomness within the cluster
-    const offsetX = (Math.sin(index * 2.5) * 15);
-    const offsetY = (Math.cos(index * 2.5) * 15);
+    return yearData;
+  }, [filteredPapers]);
+
+  // Position papers based on year (left to right chronologically)
+  const getPositionForPaper = (paper: Paper, index: number) => {
+    const yearData = yearDistribution.find(yd => yd.year === paper.year);
+    if (!yearData) return { left: '50%', top: '50%' };
     
-    return { 
-      left: `${Math.max(5, Math.min(95, clusterX + offsetX))}%`, 
-      top: `${Math.max(5, Math.min(95, clusterY + offsetY))}%` 
-    };
+    // Calculate cumulative width up to this year
+    const yearIndex = yearDistribution.findIndex(yd => yd.year === paper.year);
+    const cumulativeWidth = yearDistribution.slice(0, yearIndex).reduce((sum, yd) => sum + yd.width, 0);
+    
+    // Position within the year's allocated space
+    const papersInYear = filteredPapers.filter(p => p.year === paper.year);
+    const paperIndexInYear = papersInYear.findIndex(p => p.id === paper.id);
+    
+    // Distribute papers within the year column with some vertical spread
+    const baseX = cumulativeWidth + (yearData.width / 2);
+    const offsetX = (Math.sin(paperIndexInYear * 2.5) * (yearData.width * 0.3));
+    const x = Math.max(5, Math.min(95, baseX + offsetX));
+    
+    // Vertical positioning with clustering
+    const baseY = 30 + (paperIndexInYear * 15) % 40;
+    const offsetY = (Math.cos(paperIndexInYear * 1.8) * 10);
+    const y = Math.max(10, Math.min(90, baseY + offsetY));
+    
+    return { left: `${x}%`, top: `${y}%` };
   };
 
   const getCategoryColor = (category: string) => {
@@ -88,7 +111,7 @@ export const PaperCollectionPage: React.FC = () => {
             </span>
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Interactive starsky visualization of research papers clustered by categories
+            Interactive temporal visualization of research papers organized chronologically
           </p>
         </div>
 
@@ -121,6 +144,43 @@ export const PaperCollectionPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Year Stripe */}
+        <div className="mb-4 bg-slate-800/30 rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-300">Publication Timeline</span>
+            <span className="text-sm text-gray-400">{yearFilter.min} - {yearFilter.max}</span>
+          </div>
+          <div className="relative h-12 bg-slate-700/50 rounded-lg overflow-hidden">
+            {/* Year divisions */}
+            {yearDistribution.map((yearData, index) => {
+              const cumulativeWidth = yearDistribution.slice(0, index).reduce((sum, yd) => sum + yd.width, 0);
+              const isInRange = yearData.year >= yearFilter.min && yearData.year <= yearFilter.max;
+              
+              return (
+                <div
+                  key={yearData.year}
+                  className={`absolute top-0 h-full transition-all duration-500 border-r border-slate-600/50 ${
+                    isInRange ? 'bg-gradient-to-r from-purple-500/30 to-blue-500/30' : 'bg-slate-600/20'
+                  }`}
+                  style={{
+                    left: `${cumulativeWidth}%`,
+                    width: `${yearData.width}%`
+                  }}
+                >
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+                    <div className={`text-sm font-bold ${isInRange ? 'text-white' : 'text-gray-400'}`}>
+                      {yearData.year}
+                    </div>
+                    <div className={`text-xs ${isInRange ? 'text-purple-200' : 'text-gray-500'}`}>
+                      {yearData.count} papers
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Starsky Map */}
         <div className="relative bg-gradient-to-br from-slate-900/50 to-purple-900/30 rounded-2xl border border-slate-700/50 overflow-hidden mb-6" style={{ height: '60vh' }}>
           {/* Background stars */}
@@ -138,16 +198,30 @@ export const PaperCollectionPage: React.FC = () => {
             ))}
           </div>
 
+          {/* Year division lines */}
+          {yearDistribution.map((yearData, index) => {
+            const cumulativeWidth = yearDistribution.slice(0, index).reduce((sum, yd) => sum + yd.width, 0);
+            if (index === 0) return null;
+            
+            return (
+              <div
+                key={`division-${yearData.year}`}
+                className="absolute top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-slate-500/30 to-transparent transition-all duration-500"
+                style={{ left: `${cumulativeWidth}%` }}
+              />
+            );
+          })}
+
           {/* Paper stars */}
           {filteredPapers.map((paper, index) => {
-            const position = getPositionForPaper(paper, index, filteredPapers.length);
+            const position = getPositionForPaper(paper, index);
             const size = Math.max(16, Math.min(28, paper.citations / 8));
             const colorClass = getCcfRankColor(paper.ccfRank);
             
             return (
               <div
                 key={paper.id}
-                className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group transition-all duration-500"
                 style={position}
                 onClick={() => setSelectedPaper(paper)}
               >
@@ -171,17 +245,27 @@ export const PaperCollectionPage: React.FC = () => {
                 </div>
                 <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10 max-w-48">
                   {paper.title.substring(0, 40)}...
-                  <div className="text-xs mt-1">{paper.ccfRank}</div>
+                  <div className="text-xs mt-1">{paper.ccfRank} • {paper.year}</div>
                 </div>
               </div>
             );
           })}
+
+          {/* Year labels at bottom */}
+          <div className="absolute bottom-4 left-0 right-0 flex justify-between px-4">
+            <div className="text-xs text-gray-400 bg-slate-800/70 px-2 py-1 rounded">
+              {yearRange.min} (Oldest)
+            </div>
+            <div className="text-xs text-gray-400 bg-slate-800/70 px-2 py-1 rounded">
+              {yearRange.max} (Latest)
+            </div>
+          </div>
         </div>
 
         {/* Time Axis */}
         <div className="mb-6 bg-slate-800/30 rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-300">Publication Year Range</span>
+            <span className="text-sm font-medium text-gray-300">Year Filter Range</span>
             <span className="text-sm text-gray-400">{yearFilter.min} - {yearFilter.max}</span>
           </div>
           <div className="relative">
@@ -208,7 +292,7 @@ export const PaperCollectionPage: React.FC = () => {
                 />
                 <div className="h-2 bg-slate-700 rounded-lg relative">
                   <div 
-                    className="absolute h-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg"
+                    className="absolute h-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg transition-all duration-300"
                     style={{
                       left: `${((yearFilter.min - yearRange.min) / (yearRange.max - yearRange.min)) * 100}%`,
                       width: `${((yearFilter.max - yearFilter.min) / (yearRange.max - yearRange.min)) * 100}%`
@@ -259,7 +343,7 @@ export const PaperCollectionPage: React.FC = () => {
               <span>•</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span>Click on stars or list items to view details</span>
+              <span>Papers organized chronologically (left = older, right = newer)</span>
             </div>
           </div>
         </div>
