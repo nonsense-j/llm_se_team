@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Search, Star, Users, Calendar, ExternalLink, X, BookOpen } from 'lucide-react';
 import { papers, Paper, PAPER_CATEGORIES } from '../data/papers';
 
@@ -8,13 +8,22 @@ export const PaperCollectionPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPaper, setSelectedPaper] = useState<Paper | null>(null);
+  
+  // Year range state
+  const yearRange = useMemo(() => {
+    const years = papers.map(paper => paper.year);
+    return { min: Math.min(...years), max: Math.max(...years) };
+  }, []);
+  
+  const [yearFilter, setYearFilter] = useState({ min: yearRange.min, max: yearRange.max });
 
   const filteredPapers = papers.filter(paper => {
     const matchesCategory = selectedCategory === 'All' || paper.categories.includes(selectedCategory);
     const matchesSearch = paper.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          paper.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          paper.categories.some(category => category.toLowerCase().includes(searchTerm.toLowerCase()));
-    return matchesCategory && matchesSearch;
+    const matchesYear = paper.year >= yearFilter.min && paper.year <= yearFilter.max;
+    return matchesCategory && matchesSearch && matchesYear;
   });
 
   // Group papers by categories for positioning
@@ -113,7 +122,7 @@ export const PaperCollectionPage: React.FC = () => {
         </div>
 
         {/* Starsky Map */}
-        <div className="relative bg-gradient-to-br from-slate-900/50 to-purple-900/30 rounded-2xl border border-slate-700/50 overflow-hidden mb-8" style={{ height: '60vh' }}>
+        <div className="relative bg-gradient-to-br from-slate-900/50 to-purple-900/30 rounded-2xl border border-slate-700/50 overflow-hidden mb-6" style={{ height: '60vh' }}>
           {/* Background stars */}
           <div className="absolute inset-0">
             {Array.from({ length: 50 }).map((_, i) => (
@@ -142,8 +151,20 @@ export const PaperCollectionPage: React.FC = () => {
                 style={position}
                 onClick={() => setSelectedPaper(paper)}
               >
+                {/* Halo for starred papers */}
+                {paper.starred && (
+                  <div
+                    className="absolute inset-0 rounded-full border-2 border-yellow-400/60 animate-pulse"
+                    style={{ 
+                      width: size + 12, 
+                      height: size + 12,
+                      left: -6,
+                      top: -6
+                    }}
+                  />
+                )}
                 <div
-                  className={`bg-gradient-to-br ${colorClass} rounded-full flex items-center justify-center hover:scale-150 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-blue-500/50`}
+                  className={`bg-gradient-to-br ${colorClass} rounded-full flex items-center justify-center hover:scale-150 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-blue-500/50 ${paper.starred ? 'ring-2 ring-yellow-400/40' : ''}`}
                   style={{ width: size, height: size }}
                 >
                   <Star size={size * 0.6} className="text-white fill-current" />
@@ -157,11 +178,60 @@ export const PaperCollectionPage: React.FC = () => {
           })}
         </div>
 
+        {/* Time Axis */}
+        <div className="mb-6 bg-slate-800/30 rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-300">Publication Year Range</span>
+            <span className="text-sm text-gray-400">{yearFilter.min} - {yearFilter.max}</span>
+          </div>
+          <div className="relative">
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-400 w-12">{yearRange.min}</span>
+              <div className="flex-1 relative">
+                <input
+                  type="range"
+                  min={yearRange.min}
+                  max={yearRange.max}
+                  value={yearFilter.min}
+                  onChange={(e) => setYearFilter(prev => ({ ...prev, min: parseInt(e.target.value) }))}
+                  className="absolute w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider-thumb"
+                  style={{ zIndex: 2 }}
+                />
+                <input
+                  type="range"
+                  min={yearRange.min}
+                  max={yearRange.max}
+                  value={yearFilter.max}
+                  onChange={(e) => setYearFilter(prev => ({ ...prev, max: parseInt(e.target.value) }))}
+                  className="absolute w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider-thumb"
+                  style={{ zIndex: 1 }}
+                />
+                <div className="h-2 bg-slate-700 rounded-lg relative">
+                  <div 
+                    className="absolute h-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg"
+                    style={{
+                      left: `${((yearFilter.min - yearRange.min) / (yearRange.max - yearRange.min)) * 100}%`,
+                      width: `${((yearFilter.max - yearFilter.min) / (yearRange.max - yearRange.min)) * 100}%`
+                    }}
+                  />
+                </div>
+              </div>
+              <span className="text-sm text-gray-400 w-12">{yearRange.max}</span>
+            </div>
+          </div>
+        </div>
+
         {/* Legend */}
         <div className="mb-8 bg-slate-800/30 rounded-xl p-4">
           <div className="flex flex-wrap gap-4 text-sm text-gray-300">
             <div className="flex items-center space-x-2">
-              <span>📌</span>
+              <div className="w-4 h-4 rounded-full border-2 border-yellow-400/60 flex items-center justify-center">
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+              </div>
+              <span>Starred (Important)</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span>•</span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-gradient-to-br from-red-400 to-red-600 rounded-full"></div>
@@ -213,6 +283,9 @@ export const PaperCollectionPage: React.FC = () => {
                       <div className="flex flex-wrap gap-1">
                         <span className="text-sm text-purple-400 font-medium">{paper.categories.join(' ▪ ')}</span>
                       </div>
+                      {paper.starred && (
+                        <Star size={16} className="text-yellow-400 fill-current" />
+                      )}
                     </div>
                     
                     <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors">
@@ -251,8 +324,13 @@ export const PaperCollectionPage: React.FC = () => {
           <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-slate-700/50 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-start mb-4">
-                <div className="flex flex-wrap gap-1">
-                  <span className="text-sm text-purple-400 font-medium">{selectedPaper.categories.join(' ▪ ')}</span>
+                <div className="flex items-center space-x-2">
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-sm text-purple-400 font-medium">{selectedPaper.categories.join(' ▪ ')}</span>
+                  </div>
+                  {selectedPaper.starred && (
+                    <Star size={16} className="text-yellow-400 fill-current" />
+                  )}
                 </div>
                 <button
                   onClick={() => setSelectedPaper(null)}
@@ -343,6 +421,29 @@ export const PaperCollectionPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        .slider-thumb::-webkit-slider-thumb {
+          appearance: none;
+          height: 20px;
+          width: 20px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+          cursor: pointer;
+          border: 2px solid #1e293b;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slider-thumb::-moz-range-thumb {
+          height: 20px;
+          width: 20px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+          cursor: pointer;
+          border: 2px solid #1e293b;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+      `}</style>
     </div>
   );
 };

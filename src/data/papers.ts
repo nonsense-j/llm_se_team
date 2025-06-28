@@ -12,6 +12,7 @@ export interface Paper {
   artifactUrl?: string;
   publication: string; // conference, journal or arxiv
   ccfRank: 'CCF-A' | 'CCF-B' | 'CCF-C' | 'CCF-N'; // CCF ranking
+  starred?: boolean; // Important paper that will be specifically presented
 }
 
 // Predefined categories for papers
@@ -31,7 +32,8 @@ export const papers: Paper[] = [
     url: 'https://example.com/papers/llm-code-generation-survey',
     artifactUrl: 'https://github.com/example/llm-code-survey',
     publication: 'TSE',
-    ccfRank: 'CCF-A'
+    ccfRank: 'CCF-A',
+    starred: true
   },
   {
     id: '2',
@@ -61,7 +63,8 @@ export const papers: Paper[] = [
     url: 'https://example.com/papers/test-case-generation-rl',
     artifactUrl: undefined,
     publication: 'ICSE',
-    ccfRank: 'CCF-A'
+    ccfRank: 'CCF-A',
+    starred: true
   },
   {
     id: '4',
@@ -107,5 +110,36 @@ export const papers: Paper[] = [
     artifactUrl: undefined,
     publication: 'ICSME',
     ccfRank: 'CCF-C'
+  },
+  {
+    id: '7',
+    title: 'Deep Learning Approaches for Bug Localization',
+    authors: ['Yang Chen', 'Wu Xiaoli'],
+    institute: 'Zhejiang University',
+    abstract: 'This study presents novel deep learning approaches for automated bug localization in large codebases, significantly reducing debugging time and improving software quality.',
+    keywords: ['Bug Localization', 'Deep Learning', 'Debugging', 'Software Quality'],
+    year: 2022,
+    categories: ['Analysis', 'Testing'],
+    citations: 178,
+    url: 'https://example.com/papers/bug-localization-dl',
+    artifactUrl: 'https://github.com/example/bug-localization',
+    publication: 'FSE',
+    ccfRank: 'CCF-A',
+    starred: true
+  },
+  {
+    id: '8',
+    title: 'Automated API Documentation Generation',
+    authors: ['Huang Mei', 'Xu Gang'],
+    institute: 'Nanjing University',
+    abstract: 'We propose an automated system for generating comprehensive API documentation using natural language processing and code analysis techniques.',
+    keywords: ['API Documentation', 'Automation', 'NLP', 'Code Analysis'],
+    year: 2022,
+    categories: ['Maintenance', 'Analysis'],
+    citations: 89,
+    url: 'https://example.com/papers/api-doc-generation',
+    artifactUrl: undefined,
+    publication: 'SANER',
+    ccfRank: 'CCF-B'
   }
 ];
