@@ -9,7 +9,7 @@ export const PaperCollectionPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPaper, setSelectedPaper] = useState<Paper | null>(null);
   
-  // Get all unique years from paper data
+  // Get all unique years from paper data (only actual years from data)
   const availableYears = useMemo(() => {
     const years = [...new Set(papers.map(paper => paper.year))].sort();
     return years;
@@ -31,25 +31,28 @@ export const PaperCollectionPage: React.FC = () => {
     return matchesCategory && matchesSearch && matchesYear;
   });
 
-  // Calculate year distribution for width allocation
+  // Calculate year distribution for width allocation (only for selected years)
   const yearDistribution = useMemo(() => {
     const distribution = new Map<number, number>();
     papers.forEach(paper => {
       distribution.set(paper.year, (distribution.get(paper.year) || 0) + 1);
     });
     
-    const totalPapers = papers.length;
-    const yearData = availableYears.map(year => ({
+    // Only include selected years in the distribution
+    const selectedYearsList = Array.from(selectedYears).sort();
+    const totalPapersInSelectedYears = selectedYearsList.reduce((sum, year) => sum + (distribution.get(year) || 0), 0);
+    
+    const yearData = selectedYearsList.map(year => ({
       year,
       count: distribution.get(year) || 0,
-      width: totalPapers > 0 ? Math.max(8, (distribution.get(year) || 0) / totalPapers * 80) : 12.5,
-      isSelected: selectedYears.has(year)
+      width: totalPapersInSelectedYears > 0 ? Math.max(8, (distribution.get(year) || 0) / totalPapersInSelectedYears * 90) : 0,
+      isSelected: true // All years in this array are selected
     }));
     
     return yearData;
-  }, [availableYears, selectedYears]);
+  }, [selectedYears]);
 
-  // Position papers based on year (left to right chronologically)
+  // Position papers based on year (left to right chronologically) - only for selected years
   const getPositionForPaper = (paper: Paper, index: number) => {
     const yearData = yearDistribution.find(yd => yd.year === paper.year);
     if (!yearData) return { left: '50%', top: '50%' };
@@ -135,6 +138,24 @@ export const PaperCollectionPage: React.FC = () => {
     return `${Math.min(...sortedSelected)} - ${Math.max(...sortedSelected)}`;
   };
 
+  // Get all year data for the timeline (including unselected years for the full timeline view)
+  const allYearDistribution = useMemo(() => {
+    const distribution = new Map<number, number>();
+    papers.forEach(paper => {
+      distribution.set(paper.year, (distribution.get(paper.year) || 0) + 1);
+    });
+    
+    const totalPapers = papers.length;
+    const yearData = availableYears.map(year => ({
+      year,
+      count: distribution.get(year) || 0,
+      width: totalPapers > 0 ? Math.max(8, (distribution.get(year) || 0) / totalPapers * 80) : 12.5,
+      isSelected: selectedYears.has(year)
+    }));
+    
+    return yearData;
+  }, [availableYears, selectedYears]);
+
   return (
     <div className="min-h-screen pt-8 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -205,8 +226,8 @@ export const PaperCollectionPage: React.FC = () => {
           {/* Year Timeline with Clickable Nodes */}
           <div className="relative h-16 bg-slate-700/50 rounded-lg overflow-hidden mb-3">
             {/* Year divisions */}
-            {yearDistribution.map((yearData, index) => {
-              const cumulativeWidth = yearDistribution.slice(0, index).reduce((sum, yd) => sum + yd.width, 0);
+            {allYearDistribution.map((yearData, index) => {
+              const cumulativeWidth = allYearDistribution.slice(0, index).reduce((sum, yd) => sum + yd.width, 0);
               
               return (
                 <div
@@ -289,7 +310,7 @@ export const PaperCollectionPage: React.FC = () => {
             ))}
           </div>
 
-          {/* Year division lines */}
+          {/* Year division lines - only for selected years */}
           {yearDistribution.map((yearData, index) => {
             const cumulativeWidth = yearDistribution.slice(0, index).reduce((sum, yd) => sum + yd.width, 0);
             if (index === 0) return null;
@@ -297,17 +318,13 @@ export const PaperCollectionPage: React.FC = () => {
             return (
               <div
                 key={`division-${yearData.year}`}
-                className={`absolute top-0 bottom-0 w-px transition-all duration-500 ${
-                  yearData.isSelected 
-                    ? 'bg-gradient-to-b from-transparent via-purple-400/50 to-transparent' 
-                    : 'bg-gradient-to-b from-transparent via-slate-500/20 to-transparent'
-                }`}
+                className="absolute top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-purple-400/50 to-transparent transition-all duration-500"
                 style={{ left: `${cumulativeWidth}%` }}
               />
             );
           })}
 
-          {/* Paper stars */}
+          {/* Paper stars - only for filtered papers (which already includes year filtering) */}
           {filteredPapers.map((paper, index) => {
             const position = getPositionForPaper(paper, index);
             const size = Math.max(16, Math.min(28, paper.citations / 8));
@@ -346,15 +363,17 @@ export const PaperCollectionPage: React.FC = () => {
             );
           })}
 
-          {/* Year labels at bottom */}
-          <div className="absolute bottom-4 left-0 right-0 flex justify-between px-4">
-            <div className="text-xs text-gray-400 bg-slate-800/70 px-2 py-1 rounded">
-              {yearRange.min} (Oldest)
+          {/* Year labels at bottom - only for selected years */}
+          {selectedYears.size > 0 && (
+            <div className="absolute bottom-4 left-0 right-0 flex justify-between px-4">
+              <div className="text-xs text-gray-400 bg-slate-800/70 px-2 py-1 rounded">
+                {Math.min(...Array.from(selectedYears))} (Oldest)
+              </div>
+              <div className="text-xs text-gray-400 bg-slate-800/70 px-2 py-1 rounded">
+                {Math.max(...Array.from(selectedYears))} (Latest)
+              </div>
             </div>
-            <div className="text-xs text-gray-400 bg-slate-800/70 px-2 py-1 rounded">
-              {yearRange.max} (Latest)
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Legend */}
