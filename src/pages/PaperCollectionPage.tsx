@@ -211,7 +211,7 @@ export const PaperCollectionPage: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <div className="flex flex-wrap gap-1">
-                        <span className="text-sm text-purple-400 font-medium">{paper.categories.join(' · ')}</span>
+                        <span className="text-sm text-purple-400 font-medium">{paper.categories.join(' ▪ ')}</span>
                       </div>
                     </div>
                     
