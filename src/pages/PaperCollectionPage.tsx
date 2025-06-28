@@ -9,40 +9,45 @@ export const PaperCollectionPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPaper, setSelectedPaper] = useState<Paper | null>(null);
   
-  // Year range state
-  const yearRange = useMemo(() => {
-    const years = papers.map(paper => paper.year);
-    return { min: Math.min(...years), max: Math.max(...years) };
+  // Get all unique years from paper data
+  const availableYears = useMemo(() => {
+    const years = [...new Set(papers.map(paper => paper.year))].sort();
+    return years;
   }, []);
   
-  const [yearFilter, setYearFilter] = useState({ min: yearRange.min, max: yearRange.max });
+  const yearRange = useMemo(() => {
+    return { min: Math.min(...availableYears), max: Math.max(...availableYears) };
+  }, [availableYears]);
+  
+  // Track selected years (initially all years are selected)
+  const [selectedYears, setSelectedYears] = useState<Set<number>>(new Set(availableYears));
 
   const filteredPapers = papers.filter(paper => {
     const matchesCategory = selectedCategory === 'All' || paper.categories.includes(selectedCategory);
     const matchesSearch = paper.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          paper.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          paper.categories.some(category => category.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesYear = paper.year >= yearFilter.min && paper.year <= yearFilter.max;
+    const matchesYear = selectedYears.has(paper.year);
     return matchesCategory && matchesSearch && matchesYear;
   });
 
   // Calculate year distribution for width allocation
   const yearDistribution = useMemo(() => {
     const distribution = new Map<number, number>();
-    filteredPapers.forEach(paper => {
+    papers.forEach(paper => {
       distribution.set(paper.year, (distribution.get(paper.year) || 0) + 1);
     });
     
-    const totalPapers = filteredPapers.length;
-    const years = Array.from(distribution.keys()).sort();
-    const yearData = years.map(year => ({
+    const totalPapers = papers.length;
+    const yearData = availableYears.map(year => ({
       year,
       count: distribution.get(year) || 0,
-      width: totalPapers > 0 ? Math.max(8, (distribution.get(year) || 0) / totalPapers * 80) : 12.5
+      width: totalPapers > 0 ? Math.max(8, (distribution.get(year) || 0) / totalPapers * 80) : 12.5,
+      isSelected: selectedYears.has(year)
     }));
     
     return yearData;
-  }, [filteredPapers]);
+  }, [availableYears, selectedYears]);
 
   // Position papers based on year (left to right chronologically)
   const getPositionForPaper = (paper: Paper, index: number) => {
@@ -100,6 +105,36 @@ export const PaperCollectionPage: React.FC = () => {
     }
   };
 
+  // Toggle year selection
+  const toggleYear = (year: number) => {
+    const newSelectedYears = new Set(selectedYears);
+    if (newSelectedYears.has(year)) {
+      newSelectedYears.delete(year);
+    } else {
+      newSelectedYears.add(year);
+    }
+    setSelectedYears(newSelectedYears);
+  };
+
+  // Select all years
+  const selectAllYears = () => {
+    setSelectedYears(new Set(availableYears));
+  };
+
+  // Clear all year selections
+  const clearAllYears = () => {
+    setSelectedYears(new Set());
+  };
+
+  // Get selected year range for display
+  const getSelectedYearRange = () => {
+    if (selectedYears.size === 0) return 'None selected';
+    if (selectedYears.size === availableYears.length) return 'All years';
+    const sortedSelected = Array.from(selectedYears).sort();
+    if (sortedSelected.length === 1) return `${sortedSelected[0]}`;
+    return `${Math.min(...sortedSelected)} - ${Math.max(...sortedSelected)}`;
+  };
+
   return (
     <div className="min-h-screen pt-8 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -144,40 +179,96 @@ export const PaperCollectionPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Year Stripe */}
+        {/* Publication Timeline with Integrated Year Filter */}
         <div className="mb-4 bg-slate-800/30 rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-300">Publication Timeline</span>
-            <span className="text-sm text-gray-400">{yearFilter.min} - {yearFilter.max}</span>
+            <span className="text-sm font-medium text-gray-300">Publication Timeline & Year Filter</span>
+            <div className="flex items-center space-x-3">
+              <span className="text-sm text-gray-400">{getSelectedYearRange()}</span>
+              <div className="flex space-x-2">
+                <button
+                  onClick={selectAllYears}
+                  className="text-xs px-2 py-1 bg-blue-500/20 text-blue-300 rounded hover:bg-blue-500/30 transition-colors"
+                >
+                  All
+                </button>
+                <button
+                  onClick={clearAllYears}
+                  className="text-xs px-2 py-1 bg-red-500/20 text-red-300 rounded hover:bg-red-500/30 transition-colors"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="relative h-12 bg-slate-700/50 rounded-lg overflow-hidden">
+          
+          {/* Year Timeline with Clickable Nodes */}
+          <div className="relative h-16 bg-slate-700/50 rounded-lg overflow-hidden mb-3">
             {/* Year divisions */}
             {yearDistribution.map((yearData, index) => {
               const cumulativeWidth = yearDistribution.slice(0, index).reduce((sum, yd) => sum + yd.width, 0);
-              const isInRange = yearData.year >= yearFilter.min && yearData.year <= yearFilter.max;
               
               return (
                 <div
                   key={yearData.year}
-                  className={`absolute top-0 h-full transition-all duration-500 border-r border-slate-600/50 ${
-                    isInRange ? 'bg-gradient-to-r from-purple-500/30 to-blue-500/30' : 'bg-slate-600/20'
+                  className={`absolute top-0 h-full transition-all duration-500 border-r border-slate-600/50 cursor-pointer hover:bg-purple-500/20 ${
+                    yearData.isSelected 
+                      ? 'bg-gradient-to-r from-purple-500/40 to-blue-500/40' 
+                      : 'bg-slate-600/20 hover:bg-slate-600/30'
                   }`}
                   style={{
                     left: `${cumulativeWidth}%`,
                     width: `${yearData.width}%`
                   }}
+                  onClick={() => toggleYear(yearData.year)}
                 >
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                    <div className={`text-sm font-bold ${isInRange ? 'text-white' : 'text-gray-400'}`}>
+                    <div className={`text-sm font-bold transition-colors ${
+                      yearData.isSelected ? 'text-white' : 'text-gray-400'
+                    }`}>
                       {yearData.year}
                     </div>
-                    <div className={`text-xs ${isInRange ? 'text-purple-200' : 'text-gray-500'}`}>
+                    <div className={`text-xs transition-colors ${
+                      yearData.isSelected ? 'text-purple-200' : 'text-gray-500'
+                    }`}>
                       {yearData.count} papers
                     </div>
                   </div>
+                  
+                  {/* Selection indicator */}
+                  {yearData.isSelected && (
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-purple-400 rounded-full"></div>
+                  )}
                 </div>
               );
             })}
+          </div>
+
+          {/* Year Axis with Individual Year Nodes */}
+          <div className="relative">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-400">Click years to filter</span>
+              <div className="flex items-center space-x-1">
+                {availableYears.map((year, index) => (
+                  <React.Fragment key={year}>
+                    <button
+                      onClick={() => toggleYear(year)}
+                      className={`px-2 py-1 text-xs rounded-full transition-all duration-300 hover:scale-110 ${
+                        selectedYears.has(year)
+                          ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
+                          : 'bg-slate-600/50 text-gray-400 hover:bg-slate-600/70 hover:text-gray-300'
+                      }`}
+                    >
+                      {year}
+                    </button>
+                    {index < availableYears.length - 1 && (
+                      <div className="w-2 h-px bg-slate-600/50"></div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+              <span className="text-xs text-gray-400">{selectedYears.size}/{availableYears.length} selected</span>
+            </div>
           </div>
         </div>
 
@@ -206,7 +297,11 @@ export const PaperCollectionPage: React.FC = () => {
             return (
               <div
                 key={`division-${yearData.year}`}
-                className="absolute top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-slate-500/30 to-transparent transition-all duration-500"
+                className={`absolute top-0 bottom-0 w-px transition-all duration-500 ${
+                  yearData.isSelected 
+                    ? 'bg-gradient-to-b from-transparent via-purple-400/50 to-transparent' 
+                    : 'bg-gradient-to-b from-transparent via-slate-500/20 to-transparent'
+                }`}
                 style={{ left: `${cumulativeWidth}%` }}
               />
             );
@@ -258,49 +353,6 @@ export const PaperCollectionPage: React.FC = () => {
             </div>
             <div className="text-xs text-gray-400 bg-slate-800/70 px-2 py-1 rounded">
               {yearRange.max} (Latest)
-            </div>
-          </div>
-        </div>
-
-        {/* Time Axis */}
-        <div className="mb-6 bg-slate-800/30 rounded-xl p-4">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-300">Year Filter Range</span>
-            <span className="text-sm text-gray-400">{yearFilter.min} - {yearFilter.max}</span>
-          </div>
-          <div className="relative">
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-400 w-12">{yearRange.min}</span>
-              <div className="flex-1 relative">
-                <input
-                  type="range"
-                  min={yearRange.min}
-                  max={yearRange.max}
-                  value={yearFilter.min}
-                  onChange={(e) => setYearFilter(prev => ({ ...prev, min: parseInt(e.target.value) }))}
-                  className="absolute w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider-thumb"
-                  style={{ zIndex: 2 }}
-                />
-                <input
-                  type="range"
-                  min={yearRange.min}
-                  max={yearRange.max}
-                  value={yearFilter.max}
-                  onChange={(e) => setYearFilter(prev => ({ ...prev, max: parseInt(e.target.value) }))}
-                  className="absolute w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider-thumb"
-                  style={{ zIndex: 1 }}
-                />
-                <div className="h-2 bg-slate-700 rounded-lg relative">
-                  <div 
-                    className="absolute h-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg transition-all duration-300"
-                    style={{
-                      left: `${((yearFilter.min - yearRange.min) / (yearRange.max - yearRange.min)) * 100}%`,
-                      width: `${((yearFilter.max - yearFilter.min) / (yearRange.max - yearRange.min)) * 100}%`
-                    }}
-                  />
-                </div>
-              </div>
-              <span className="text-sm text-gray-400 w-12">{yearRange.max}</span>
             </div>
           </div>
         </div>
@@ -505,29 +557,6 @@ export const PaperCollectionPage: React.FC = () => {
           </div>
         </div>
       )}
-
-      <style jsx>{`
-        .slider-thumb::-webkit-slider-thumb {
-          appearance: none;
-          height: 20px;
-          width: 20px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-          cursor: pointer;
-          border: 2px solid #1e293b;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-        
-        .slider-thumb::-moz-range-thumb {
-          height: 20px;
-          width: 20px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-          cursor: pointer;
-          border: 2px solid #1e293b;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-      `}</style>
     </div>
   );
 };
