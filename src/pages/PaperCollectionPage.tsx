@@ -15,10 +15,6 @@ export const PaperCollectionPage: React.FC = () => {
     return years;
   }, []);
   
-  const yearRange = useMemo(() => {
-    return { min: Math.min(...availableYears), max: Math.max(...availableYears) };
-  }, [availableYears]);
-  
   // Track selected years (initially all years are selected)
   const [selectedYears, setSelectedYears] = useState<Set<number>>(new Set(availableYears));
 
@@ -138,24 +134,6 @@ export const PaperCollectionPage: React.FC = () => {
     return `${Math.min(...sortedSelected)} - ${Math.max(...sortedSelected)}`;
   };
 
-  // Get all year data for the timeline (including unselected years for the full timeline view)
-  const allYearDistribution = useMemo(() => {
-    const distribution = new Map<number, number>();
-    papers.forEach(paper => {
-      distribution.set(paper.year, (distribution.get(paper.year) || 0) + 1);
-    });
-    
-    const totalPapers = papers.length;
-    const yearData = availableYears.map(year => ({
-      year,
-      count: distribution.get(year) || 0,
-      width: totalPapers > 0 ? Math.max(8, (distribution.get(year) || 0) / totalPapers * 80) : 12.5,
-      isSelected: selectedYears.has(year)
-    }));
-    
-    return yearData;
-  }, [availableYears, selectedYears]);
-
   return (
     <div className="min-h-screen pt-8 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -200,10 +178,10 @@ export const PaperCollectionPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Publication Timeline with Integrated Year Filter */}
-        <div className="mb-4 bg-slate-800/30 rounded-xl p-4">
+        {/* Year Filter */}
+        <div className="mb-6 bg-slate-800/30 rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-300">Publication Timeline & Year Filter</span>
+            <span className="text-sm font-medium text-gray-300">Year Filter</span>
             <div className="flex items-center space-x-3">
               <span className="text-sm text-gray-400">{getSelectedYearRange()}</span>
               <div className="flex space-x-2">
@@ -223,48 +201,6 @@ export const PaperCollectionPage: React.FC = () => {
             </div>
           </div>
           
-          {/* Year Timeline with Clickable Nodes */}
-          <div className="relative h-16 bg-slate-700/50 rounded-lg overflow-hidden mb-3">
-            {/* Year divisions */}
-            {allYearDistribution.map((yearData, index) => {
-              const cumulativeWidth = allYearDistribution.slice(0, index).reduce((sum, yd) => sum + yd.width, 0);
-              
-              return (
-                <div
-                  key={yearData.year}
-                  className={`absolute top-0 h-full transition-all duration-500 border-r border-slate-600/50 cursor-pointer hover:bg-purple-500/20 ${
-                    yearData.isSelected 
-                      ? 'bg-gradient-to-r from-purple-500/40 to-blue-500/40' 
-                      : 'bg-slate-600/20 hover:bg-slate-600/30'
-                  }`}
-                  style={{
-                    left: `${cumulativeWidth}%`,
-                    width: `${yearData.width}%`
-                  }}
-                  onClick={() => toggleYear(yearData.year)}
-                >
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                    <div className={`text-sm font-bold transition-colors ${
-                      yearData.isSelected ? 'text-white' : 'text-gray-400'
-                    }`}>
-                      {yearData.year}
-                    </div>
-                    <div className={`text-xs transition-colors ${
-                      yearData.isSelected ? 'text-purple-200' : 'text-gray-500'
-                    }`}>
-                      {yearData.count} papers
-                    </div>
-                  </div>
-                  
-                  {/* Selection indicator */}
-                  {yearData.isSelected && (
-                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-purple-400 rounded-full"></div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
           {/* Year Axis with Individual Year Nodes */}
           <div className="relative">
             <div className="flex items-center justify-between">
@@ -324,6 +260,24 @@ export const PaperCollectionPage: React.FC = () => {
             );
           })}
 
+          {/* Year labels with counts - positioned at the top of each year section */}
+          {yearDistribution.map((yearData, index) => {
+            const cumulativeWidth = yearDistribution.slice(0, index).reduce((sum, yd) => sum + yd.width, 0);
+            
+            return (
+              <div
+                key={`year-label-${yearData.year}`}
+                className="absolute top-4 transform -translate-x-1/2 bg-slate-800/80 backdrop-blur-sm border border-slate-600/50 rounded-lg px-3 py-2 transition-all duration-500"
+                style={{ left: `${cumulativeWidth + yearData.width / 2}%` }}
+              >
+                <div className="text-center">
+                  <div className="text-sm font-bold text-white">{yearData.year}</div>
+                  <div className="text-xs text-purple-300">({yearData.count})</div>
+                </div>
+              </div>
+            );
+          })}
+
           {/* Paper stars - only for filtered papers (which already includes year filtering) */}
           {filteredPapers.map((paper, index) => {
             const position = getPositionForPaper(paper, index);
@@ -363,7 +317,7 @@ export const PaperCollectionPage: React.FC = () => {
             );
           })}
 
-          {/* Year labels at bottom - only for selected years */}
+          {/* Year range indicator at bottom - only for selected years */}
           {selectedYears.size > 0 && (
             <div className="absolute bottom-4 left-0 right-0 flex justify-between px-4">
               <div className="text-xs text-gray-400 bg-slate-800/70 px-2 py-1 rounded">
