@@ -125,15 +125,6 @@ export const PaperCollectionPage: React.FC = () => {
     setSelectedYears(new Set());
   };
 
-  // Get selected year range for display
-  const getSelectedYearRange = () => {
-    if (selectedYears.size === 0) return 'None selected';
-    if (selectedYears.size === availableYears.length) return 'All years';
-    const sortedSelected = Array.from(selectedYears).sort();
-    if (sortedSelected.length === 1) return `${sortedSelected[0]}`;
-    return `${Math.min(...sortedSelected)} - ${Math.max(...sortedSelected)}`;
-  };
-
   return (
     <div className="min-h-screen pt-8 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -178,54 +169,40 @@ export const PaperCollectionPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Year Filter */}
+        {/* Year Filter - Simplified */}
         <div className="mb-6 bg-slate-800/30 rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-300">Year Filter</span>
-            <div className="flex items-center space-x-3">
-              <span className="text-sm text-gray-400">{getSelectedYearRange()}</span>
-              <div className="flex space-x-2">
-                <button
-                  onClick={selectAllYears}
-                  className="text-xs px-2 py-1 bg-blue-500/20 text-blue-300 rounded hover:bg-blue-500/30 transition-colors"
-                >
-                  All
-                </button>
-                <button
-                  onClick={clearAllYears}
-                  className="text-xs px-2 py-1 bg-red-500/20 text-red-300 rounded hover:bg-red-500/30 transition-colors"
-                >
-                  Clear
-                </button>
-              </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={selectAllYears}
+                className="text-xs px-3 py-1 bg-blue-500/20 text-blue-300 rounded hover:bg-blue-500/30 transition-colors"
+              >
+                All
+              </button>
+              <button
+                onClick={clearAllYears}
+                className="text-xs px-3 py-1 bg-red-500/20 text-red-300 rounded hover:bg-red-500/30 transition-colors"
+              >
+                Clear
+              </button>
             </div>
           </div>
           
-          {/* Year Axis with Individual Year Nodes */}
-          <div className="relative">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400">Click years to filter</span>
-              <div className="flex items-center space-x-1">
-                {availableYears.map((year, index) => (
-                  <React.Fragment key={year}>
-                    <button
-                      onClick={() => toggleYear(year)}
-                      className={`px-2 py-1 text-xs rounded-full transition-all duration-300 hover:scale-110 ${
-                        selectedYears.has(year)
-                          ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
-                          : 'bg-slate-600/50 text-gray-400 hover:bg-slate-600/70 hover:text-gray-300'
-                      }`}
-                    >
-                      {year}
-                    </button>
-                    {index < availableYears.length - 1 && (
-                      <div className="w-2 h-px bg-slate-600/50"></div>
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-              <span className="text-xs text-gray-400">{selectedYears.size}/{availableYears.length} selected</span>
-            </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            {availableYears.map((year) => (
+              <button
+                key={year}
+                onClick={() => toggleYear(year)}
+                className={`px-3 py-1 text-sm rounded-lg transition-all duration-300 hover:scale-105 ${
+                  selectedYears.has(year)
+                    ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
+                    : 'bg-slate-600/50 text-gray-400 hover:bg-slate-600/70 hover:text-gray-300'
+                }`}
+              >
+                {year}
+              </button>
+            ))}
           </div>
         </div>
 
