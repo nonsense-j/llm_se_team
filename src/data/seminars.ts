@@ -19,10 +19,31 @@ const addNotes = [
 
 export const seminars: Seminar[] = [
   {
+    id: '2',
+    title: 'Vulrule库API安全规则挖掘方法讨论',
+    date: '2025-07-02',
+    time: '14:00 - 18:00',
+    participant: 'LLM&SE全员',
+    location: '337会议室',
+    description: '了解Vulrule中安全规则的类型以及使用场景，讨论Vulrule库中API安全规则的自动化挖掘工具和方法。',
+    preparation: [
+      '全体成员：熟悉了解VulRule',
+      '
+    ],
+    references: [
+      'API Security Rule Mining in Large-Scale Software Systems',
+      'Static Analysis Techniques for Vulnerability Detection',
+      'Machine Learning Approaches to Code Security Assessment',
+      'Automated Security Rule Discovery in Software Libraries',
+      'Program Analysis for API Misuse Detection'
+    ],
+    additionalNotes: addNotes
+  },
+  {
     id: '1',
     title: 'Large Language Models在代码生成中的应用与挑战',
     date: '2025-07-02',
-    time: '14:00-17:00',
+    time: '14:00-18:00',
     participant: 'LLM&SE全体成员',
     location: '会议室337',
     description: '本次研讨会将深入探讨大语言模型在自动代码生成领域的最新进展，包括模型架构优化、训练策略改进以及在实际软件开发中的应用案例。我们将分析当前技术的局限性，讨论未来的发展方向，并探索如何提高代码生成的准确性和实用性。',
@@ -35,26 +56,6 @@ export const seminars: Seminar[] = [
       'Large Language Models for Code Generation: A Comprehensive Survey',
       'CodeT5: Identifier-aware Unified Pre-trained Encoder-Decoder Models',
       'GitHub Copilot技术报告'
-    ],
-    additionalNotes: addNotes
-  },
-  {
-    id: '2',
-    title: '软件漏洞自动检测技术研究进展',
-    date: '2025-06-25',
-    time: '12:00-17:00',
-    participant: 'LLM&SE全体成员',
-    location: '会议室337',
-    description: '探讨基于机器学习和深度学习的软件漏洞自动检测技术，分析静态分析与动态分析的结合方法，讨论如何提高漏洞检测的准确率和覆盖率。',
-    preparation: [
-      '阅读论文：《Automated Vulnerability Detection in Open Source Software》',
-      '了解常见的软件漏洞类型',
-      '准备讨论：现有检测工具的优缺点分析'
-    ],
-    references: [
-      'Automated Vulnerability Detection in Open Source Software',
-      'Deep Learning for Vulnerability Detection: A Survey',
-      'Static Analysis Tools Comparison Report'
     ],
     additionalNotes: addNotes
   }
