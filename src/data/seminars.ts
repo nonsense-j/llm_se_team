@@ -27,8 +27,9 @@ export const seminars: Seminar[] = [
     location: '337会议室',
     description: '了解Vulrule中安全规则的类型以及使用场景，讨论Vulrule库中API安全规则的自动化挖掘工具和方法。',
     preparation: [
-      '全体成员：熟悉了解VulRule',
-      '
+      '网站了解（全体成员）：熟悉了解VulRule网站内容和用处，了解安全规则使用场景',
+      '论文摘要了解（全体成员）：了解论文摘要，便于讨论',
+      '论文分享分工：APlSpecGen-刘珺；ChatDetector-李知霖；GPTAid-孙天天；AURC-计理强'
     ],
     references: [
       'API Security Rule Mining in Large-Scale Software Systems',
