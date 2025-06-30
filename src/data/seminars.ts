@@ -32,7 +32,7 @@ export const seminars: Seminar[] = [
       '论文通读及分享分工：APlSpecGen-刘珺；ChatDetector-李知霖；GPTAid-孙天天；AURC-计理强'
     ],
     references: [
-      'https://kaichen.org/vulrule'
+      'https://kaichen.org/vulrule',
       'Static Analysis Techniques for Vulnerability Detection',
       'Machine Learning Approaches to Code Security Assessment',
       'Automated Security Rule Discovery in Software Libraries',
