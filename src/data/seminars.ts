@@ -32,7 +32,7 @@ export const seminars: Seminar[] = [
       '论文通读及分享分工：APlSpecGen-刘珺；ChatDetector-李知霖；GPTAid-孙天天；AURC-计理强'
     ],
     references: [
-      <a href=https://kaichen.org/vulrule target="_blank" rel="noopener noreferrer">
+      <a href="https://kaichen.org/vulrule" target="_blank" rel="noopener noreferrer">
       Vulrule网站
       </a>
       'Static Analysis Techniques for Vulnerability Detection',
