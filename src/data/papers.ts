@@ -21,21 +21,19 @@ export const PAPER_CATEGORIES = ["Code Generation", "Testing", "Security", "Anal
 
 export const papers: Paper[] = [
   {
-    id: '1',
-    title: 'Large Language Models for Code Generation: A Comprehensive Survey',
-    authors: ['Zhang Wei', 'Li Ming', 'Wang Lei'],
-    institute: 'Tsinghua University',
-    abstract: 'This paper presents a comprehensive survey of large language models used for automatic code generation. We examine the current state-of-the-art models, their architectures, training methodologies, and performance metrics across various programming tasks.',
-    keywords: ['LLM', 'Code Generation', 'Software Engineering', 'Neural Networks'],
-    year: 2024,
-    categories: ['Code Generation', 'Analysis'],
-    citations: 234,
-    url: 'https://example.com/papers/llm-code-generation-survey',
-    artifactUrl: 'https://github.com/example/llm-code-survey',
-    publication: 'TSE',
-    ccfRank: 'CCF-A',
-    starred: true,
-    seminar: '1' // Connected to seminar about LLM code generation
+    id: '1';
+    title: "Generating API Parameter Security Rules with LLM for API Misuse Detection";
+    authors: ["Jinghua Liu", "Yi Yang", "Kai Chen", "Miaoqian Lin"];
+    institute: "Institute of Information Engineering, Chinese Academy of Sciences, China; School of Cyber Security, University of Chinese Academy of Sciences, China";
+    abstract: "This paper addresses the challenge of automatically generating API Parameter Security Rules (APSRs) to detect API misuse, which can lead to severe security issues like null pointer dereference and memory corruption. Existing methods suffer from missing information and limited heuristics. The authors propose GPTAid, a framework leveraging Large Language Models (LLMs) to analyze API source code and generate APSRs. GPTAid employs execution feedback-checking to validate generated APSRs by dynamically executing violation code and filtering incorrect rules. It further refines APSRs through code differential analysis to ensure precision. Evaluated on 200 APIs from eight popular libraries, GPTAid achieves 92.3% precision and generates 6 times more APSRs than state-of-the-art detectors. Additionally, it discovered 210 unknown security bugs in 47 applications, with 150 confirmed by developers.";
+    keywords: ["API misuse", "Security rules", "Large Language Models", "Dynamic execution", "Code differential analysis"];
+    year: 2025; // Assuming current year based on submission context
+    categories: ["Security", "Analysis"];
+    citations: 0; // Placeholder, actual citations unknown
+    url: undefined; // No URL provided
+    artifactUrl: undefined; // No artifact URL provided
+    publication: "conference"; // Likely a conference paper based on structure
+    ccfRank: "CCF-B"; // Estimated based on security/software engineering venue
   },
   {
     id: '2',
