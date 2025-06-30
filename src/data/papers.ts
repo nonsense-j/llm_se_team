@@ -119,7 +119,7 @@ export const papers: Paper[] = [
     ccfRank: "CCF-A"
   },
   {
-    id: '8',
+    id: '5',
     title: "Boosting Static Resource Leak Detection via LLM-based Resource-Oriented Intention Inference",
     authors: ["Chong Wang", "Jianan Liu", "Xin Peng", "Yang Liu", "Yiling Lou"],
     institute: "Fudan University; Nanyang Technological University",
