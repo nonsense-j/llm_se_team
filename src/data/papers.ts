@@ -21,7 +21,7 @@ export const PAPER_CATEGORIES = ["Code Generation", "Testing", "Security", "Anal
 
 export const papers: Paper[] = [
   {
-    id: 1,
+    id: '1',
     title: "Unifying the Perspectives of NLP and Software Engineering: A Survey on Language Models for Code",
     authors: [
         "Ziyin Zhang", 
@@ -49,7 +49,7 @@ export const papers: Paper[] = [
     ccfRank: "CCF-N"
   },
   {
-    id: 2,
+    id: '2',
     title: "Software Testing with Large Language Models: Survey, Landscape, and Vision",
     authors: [
         "Junjie Wang", 
@@ -76,7 +76,7 @@ export const papers: Paper[] = [
     ccfRank: "CCF-A" // Default (update if venue is known)
   },
   {
-    id: 3,
+    id: '3',
     title: "Large Language Model-Based Agents for Software Engineering: A Survey",
     authors: [
         "Junwei Liu", 
@@ -170,12 +170,12 @@ export const papers: Paper[] = [
     title: "The Midas Touch: Triggering the Capability of LLMs for RM-API Misuse Detection",
     authors: ["Yi Yang", "Jinghua Liu", "Kai Chen", "Miaoqian Lin"],
     institute: "IIE CAS",
-    abstract: "This paper addresses the challenge of detecting Resource Management API (RM-API) misuse, where traditional pattern-matching methods fail due to incomplete documentation coverage and incorrect usage patterns. The authors propose ChadDetector, an LLM-based framework that automates constraint retrieval and misuse detection. To overcome LLM hallucinations, ChadDetector decomposes tasks into allocation API identification, RM-object extraction, and API pairing using a ReAct-inspired approach. It employs two-dimensional prompting for cross-validation and inconsistency-checking against NLP tools. Evaluated on six libraries, ChadDetector achieved 98.21% precision in identifying 165 RM-API pairs and detected 115 security bugs (e.g., DoS, memory corruption), retrieving 47% more RM sentences and 80.85% more constraints than benchmarks.",
+    abstract: "This paper addresses the challenge of detecting Resource Management API (RM-API) misuse, where traditional pattern-matching methods fail due to incomplete documentation coverage and incorrect usage patterns. The authors propose ChatDetector, an LLM-based framework that automates constraint retrieval and misuse detection. To overcome LLM hallucinations, ChatDetector decomposes tasks into allocation API identification, RM-object extraction, and API pairing using a ReAct-inspired approach. It employs two-dimensional prompting for cross-validation and inconsistency-checking against NLP tools. Evaluated on six libraries, ChatDetector achieved 98.21% precision in identifying 165 RM-API pairs and detected 115 security bugs (e.g., DoS, memory corruption), retrieving 47% more RM sentences and 80.85% more constraints than benchmarks.",
     keywords: ["RM-API Misuse", "Large Language Models", "Resource Management", "Bug Detection", "Static Analysis"],
     year: 2025, // NDSS Symposium 2025
     categories: ["Security"],
     citations: 0, // New publication
-    url: "https://dx.doi.org/10.14722/ndss.2025.230816",
+    url: "https://www.ndss-symposium.org/ndss-paper/the-midas-touch-triggering-the-capability-of-llms-for-rm-api-misuse-detection/",
     artifactUrl: undefined, // No artifact mentioned
     publication: "NDSS", // Network and Distributed System Security Symposium
     ccfRank: "CCF-A", // NDSS is CCF-A

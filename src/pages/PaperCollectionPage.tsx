@@ -42,13 +42,42 @@ export const PaperCollectionPage: React.FC = () => {
     const selectedYearsList = Array.from(selectedYears).sort();
     const totalPapersInSelectedYears = selectedYearsList.reduce((sum, year) => sum + (distribution.get(year) || 0), 0);
     
-    const yearData = selectedYearsList.map(year => ({
+    let yearData = selectedYearsList.map(year => ({
       year,
       count: distribution.get(year) || 0,
-      width: totalPapersInSelectedYears > 0 ? Math.max(8, (distribution.get(year) || 0) / totalPapersInSelectedYears * 90) : 0,
+      width: totalPapersInSelectedYears > 0 ? (distribution.get(year) || 0) / totalPapersInSelectedYears * 100 : 0,
       isSelected: true // All years in this array are selected
     }));
-    
+
+    // Normalize widths to ensure they sum up to 100% (or close to it)
+    const totalWidth = yearData.reduce((sum, yd) => sum + yd.width, 0);
+    if (totalWidth > 0) {
+      yearData = yearData.map(yd => ({ ...yd, width: (yd.width / totalWidth) * 100 }));
+    }
+
+    // Ensure a minimum width for visibility if needed, and re-normalize
+    const minWidth = 5; // Minimum percentage width for a year column
+    let remainingWidth = 100;
+    let yearsToAdjust = yearData.filter(yd => yd.width < minWidth);
+
+    if (yearsToAdjust.length > 0) {
+      // Assign minimum width to small columns
+      yearsToAdjust.forEach(yd => {
+        yd.width = minWidth;
+        remainingWidth -= minWidth;
+      });
+
+      // Distribute remaining width among larger columns
+      const largerYears = yearData.filter(yd => yd.width >= minWidth);
+      const currentLargerWidth = largerYears.reduce((sum, yd) => sum + yd.width, 0);
+
+      if (currentLargerWidth > 0) {
+        largerYears.forEach(yd => {
+          yd.width = (yd.width / currentLargerWidth) * remainingWidth;
+        });
+      }
+    }
+
     return yearData;
   }, [selectedYears]);
 
@@ -359,7 +388,7 @@ export const PaperCollectionPage: React.FC = () => {
                 </div>
                 <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10 max-w-48">
                   {paper.title.substring(0, 40)}...
-                  <div className="text-xs mt-1">{paper.ccfRank} • {paper.year}</div>
+                  <div className="text-xs mt-1">{paper.publication} • {paper.year}</div>
                 </div>
               </div>
             );

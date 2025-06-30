@@ -144,10 +144,16 @@ export const SeminarDetailPage: React.FC = () => {
             <h2 className="text-2xl font-bold text-white mb-4">参考资料</h2>
             <div className="space-y-3">
               {seminar.references?.map((ref, index) => (
-                <div key={index} className="flex items-center space-x-3 text-gray-300 hover:text-blue-300 transition-colors cursor-pointer">
-                  <ExternalLink size={16} className="text-blue-400 flex-shrink-0" />
-                  {ref}
-                </div>
+                <a
+                  key={index}
+                  href={ref.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-3 text-gray-300 hover:text-blue-300 transition-colors group"
+                >
+                  <ExternalLink size={16} className="text-blue-400 flex-shrink-0 group-hover:text-blue-300" />
+                  <span className="group-hover:underline">{ref.name}</span>
+                </a>
               ))}
             </div>
           </div>

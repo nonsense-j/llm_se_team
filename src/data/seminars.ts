@@ -7,7 +7,7 @@ export interface Seminar {
   location: string;
   description: string;
   preparation?: string[];
-  references?: string[];
+  references?: { name: string; url: string; }[];
   additionalNotes?: string[]; // New field for 补充说明
 }
 
@@ -32,11 +32,11 @@ export const seminars: Seminar[] = [
       '论文通读及分享分工：APlSpecGen-刘珺；ChatDetector-李知霖；GPTAid-孙天天；AURC-计理强'
     ],
     references: [
-      'https://kaichen.org/vulrule',
-      'Static Analysis Techniques for Vulnerability Detection',
-      'Machine Learning Approaches to Code Security Assessment',
-      'Automated Security Rule Discovery in Software Libraries',
-      'Program Analysis for API Misuse Detection'
+      { name: 'VulRule Website | https://kaichen.org/vulrule', url: 'https://kaichen.org/vulrule' },
+      { name: 'APISpecGen | Uncovering the iceberg from the tip: Generating API Specifications for Bug Detection via Specification Propagation Analysis', url: 'https://www.ndss-symposium.org/ndss-paper/uncovering-the-iceberg-from-the-tip-generating-api-specifications-for-bug-detection-via-specification-propagation-analysis/' },
+      { name: 'AURC | AURC: Detecting Errors in Program Code and Documentation', url: 'https://www.usenix.org/conference/usenixsecurity23/presentation/hu' },
+      { name: 'ChatDetector | The Midas Touch: Triggering the Capability of LLMs for RM-API Misuse Detection', url: 'https://www.ndss-symposium.org/ndss-paper/the-midas-touch-triggering-the-capability-of-llms-for-rm-api-misuse-detection/' },
+      { name: 'GPTAid | Generating API Parameter Security Rules with LLM for API Misuse Detection', url: 'https://www.ndss-symposium.org/ndss-paper/generating-api-parameter-security-rules-with-llm-for-api-misuse-detection/' }
     ],
     additionalNotes: addNotes
   }
