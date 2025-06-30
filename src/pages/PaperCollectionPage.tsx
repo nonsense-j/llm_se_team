@@ -314,7 +314,7 @@ export const PaperCollectionPage: React.FC = () => {
               <div className="w-4 h-4 rounded-full border-2 border-yellow-400/60 flex items-center justify-center">
                 <div className="w-2 h-2 bg-red-500 rounded-full"></div>
               </div>
-              <span>Starred (Important)</span>
+              <span>Starred</span>
             </div>
             <div className="flex items-center space-x-2">
               <span>•</span>
@@ -340,12 +340,6 @@ export const PaperCollectionPage: React.FC = () => {
             </div>
             <div className="flex items-center space-x-2">
               <span>Size indicates citation count</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span>•</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span>Papers organized chronologically (left = older, right = newer)</span>
             </div>
           </div>
         </div>
