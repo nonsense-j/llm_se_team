@@ -130,7 +130,8 @@ export const papers: Paper[] = [
     url: "https://www.ndss-symposium.org/ndss-paper/generating-api-parameter-security-rules-with-llm-for-api-misuse-detection/",
     artifactUrl: "https://github.com/icy17/GPTAid/", 
     publication: "NDSS", 
-    ccfRank: "CCF-A"
+    ccfRank: "CCF-A",
+    seminar: '1'
   },
   {
     id: '6',
@@ -160,7 +161,8 @@ export const papers: Paper[] = [
     url: "https://www.usenix.org/conference/usenixsecurity23/presentation/hu", // No direct paper link provided
     artifactUrl: "https://github.com/PeiweiHu/AURC", // No artifact mentioned
     publication: "USENIX Security", // Explicitly mentioned
-    ccfRank: "CCF-A" // USENIX Security is CCF-A
+    ccfRank: "CCF-A",
+    seminar: '1'
   },
   {
     id: '8',
