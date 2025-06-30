@@ -111,7 +111,7 @@ export const SeminarPage: React.FC = () => {
                       
                       <h3 className="text-xl font-bold text-white mb-2 flex group-hover:text-blue-300 transition-colors">
                         <MessageSquare size={18} className="mr-2 text-blue-400" />
-                        💭 {seminar.title}
+                        {seminar.title}
                       </h3>
                       
                       <p className="text-lg text-blue-300 mb-3 font-medium flex items-center">
