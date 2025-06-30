@@ -19,7 +19,7 @@ const addNotes = [
 
 export const seminars: Seminar[] = [
   {
-    id: '2',
+    id: '1',
     title: 'Vulrule库API安全规则挖掘方法讨论',
     date: '2025-07-02',
     time: '14:00 - 18:00',
@@ -37,26 +37,6 @@ export const seminars: Seminar[] = [
       'Machine Learning Approaches to Code Security Assessment',
       'Automated Security Rule Discovery in Software Libraries',
       'Program Analysis for API Misuse Detection'
-    ],
-    additionalNotes: addNotes
-  },
-  {
-    id: '1',
-    title: 'Large Language Models在代码生成中的应用与挑战',
-    date: '2025-07-02',
-    time: '14:00-18:00',
-    participant: 'LLM&SE全体成员',
-    location: '会议室337',
-    description: '本次研讨会将深入探讨大语言模型在自动代码生成领域的最新进展，包括模型架构优化、训练策略改进以及在实际软件开发中的应用案例。我们将分析当前技术的局限性，讨论未来的发展方向，并探索如何提高代码生成的准确性和实用性。',
-    preparation: [
-      '阅读论文：《Large Language Models for Code Generation: A Comprehensive Survey》',
-      '准备分享：每人准备一个代码生成的实际案例',
-      '思考问题：当前LLM代码生成面临的主要挑战是什么？'
-    ],
-    references: [
-      'Large Language Models for Code Generation: A Comprehensive Survey',
-      'CodeT5: Identifier-aware Unified Pre-trained Encoder-Decoder Models',
-      'GitHub Copilot技术报告'
     ],
     additionalNotes: addNotes
   }
