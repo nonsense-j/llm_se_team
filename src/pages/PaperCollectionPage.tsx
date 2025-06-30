@@ -458,7 +458,7 @@ export const PaperCollectionPage: React.FC = () => {
                           className="inline-flex items-center space-x-2 text-sm text-green-400 hover:text-green-300 transition-colors bg-green-400/10 px-3 py-1 rounded-full border border-green-400/20 hover:border-green-400/40"
                         >
                           <MessageSquare size={14} />
-                          <span>Related Seminar: {seminarInfo.id}...</span>
+                          <span>Seminar {seminarInfo.id}: {seminarInfo.title.substring(0, 30)}...</span>
                         </Link>
                       )}
                     </div>
