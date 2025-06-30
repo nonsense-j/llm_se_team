@@ -91,7 +91,7 @@ export const SeminarDetailPage: React.FC = () => {
           </div>
           
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            主题：{seminar.title}
+            {seminar.title}
           </h1>
 
           <div className="grid md:grid-cols-2 gap-4 text-gray-300">
