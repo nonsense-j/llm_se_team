@@ -6,7 +6,7 @@ import { seminars, type Seminar } from '../data/seminars';
 export const SeminarDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const seminar = id ? seminars.find(s => s.id === id) : null;
-  const [isNotesExpanded, setIsNotesExpanded] = useState(false);
+  const [isNotesExpanded, setIsNotesExpanded] = useState(true);
 
   // Function to determine status based on current date and time
   const getStatus = (seminar: Seminar): 'upcoming' | 'ongoing' | 'completed' => {
