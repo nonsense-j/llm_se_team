@@ -13,6 +13,7 @@ export interface Paper {
   publication: string; // conference, journal or arxiv
   ccfRank: 'CCF-A' | 'CCF-B' | 'CCF-C' | 'CCF-N'; // CCF ranking
   starred?: boolean; // Important paper that will be specifically presented
+  seminar?: string; // Seminar ID that this paper is connected to
 }
 
 // Predefined categories for papers
@@ -33,7 +34,8 @@ export const papers: Paper[] = [
     artifactUrl: 'https://github.com/example/llm-code-survey',
     publication: 'TSE',
     ccfRank: 'CCF-A',
-    starred: true
+    starred: true,
+    seminar: '1' // Connected to seminar about LLM code generation
   },
   {
     id: '2',
@@ -48,7 +50,8 @@ export const papers: Paper[] = [
     url: 'https://example.com/papers/vulnerability-detection',
     artifactUrl: 'https://github.com/example/vulnerability-detection-tool',
     publication: 'CCS',
-    ccfRank: 'CCF-A'
+    ccfRank: 'CCF-A',
+    seminar: '2' // Connected to seminar about vulnerability detection
   },
   {
     id: '3',
@@ -94,7 +97,8 @@ export const papers: Paper[] = [
     url: 'https://example.com/papers/program-synthesis-llm',
     artifactUrl: 'https://github.com/example/program-synthesis',
     publication: 'arxiv',
-    ccfRank: 'CCF-N'
+    ccfRank: 'CCF-N',
+    seminar: '1' // Also connected to LLM code generation seminar
   },
   {
     id: '6',

@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Star, Users, Calendar, ExternalLink, X, BookOpen } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Search, Star, Users, Calendar, ExternalLink, X, BookOpen, MessageSquare } from 'lucide-react';
 import { papers, Paper, PAPER_CATEGORIES } from '../data/papers';
+import { seminars } from '../data/seminars';
 
 export const PaperCollectionPage: React.FC = () => {
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set(['All']));
@@ -19,7 +21,7 @@ export const PaperCollectionPage: React.FC = () => {
   const filteredPapers = papers.filter(paper => {
     // Category filtering with multi-select logic
     const matchesCategory = selectedCategories.has('All') || 
-                           selectedCategories.has('Starred') && paper.starred ||
+                           (selectedCategories.has('Starred') && paper.starred) ||
                            paper.categories.some(category => selectedCategories.has(category));
     
     const matchesSearch = paper.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -132,8 +134,8 @@ export const PaperCollectionPage: React.FC = () => {
     const newSelectedCategories = new Set(selectedCategories);
     
     if (category === 'All') {
-      // If "All" is clicked, clear everything and select only "All"
-      setSelectedCategories(new Set(['All']));
+      // If "All" is clicked, select all categories including "All" and "Starred"
+      setSelectedCategories(new Set(['All', 'Starred', ...PAPER_CATEGORIES]));
     } else {
       // Remove "All" if it's selected and we're selecting a specific category
       if (newSelectedCategories.has('All')) {
@@ -173,6 +175,11 @@ export const PaperCollectionPage: React.FC = () => {
         ? 'bg-blue-500 text-white'
         : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50';
     }
+  };
+
+  // Get seminar info for a paper
+  const getSeminarInfo = (seminarId: string) => {
+    return seminars.find(s => s.id === seminarId);
   };
 
   return (
@@ -403,49 +410,65 @@ export const PaperCollectionPage: React.FC = () => {
             Paper Collection ({filteredPapers.length})
           </h2>
           <div className="grid gap-4">
-            {filteredPapers.map((paper) => (
-              <div
-                key={paper.id}
-                onClick={() => setSelectedPaper(paper)}
-                className="group cursor-pointer bg-slate-700/30 hover:bg-slate-700/50 rounded-xl p-4 transition-all duration-300 hover:scale-[1.02] border border-slate-600/30 hover:border-purple-500/50"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <div className="flex flex-wrap gap-1">
-                        <span className="text-sm text-purple-400 font-medium">{paper.categories.join(' ▪ ')}</span>
+            {filteredPapers.map((paper) => {
+              const seminarInfo = paper.seminar ? getSeminarInfo(paper.seminar) : null;
+              
+              return (
+                <div
+                  key={paper.id}
+                  onClick={() => setSelectedPaper(paper)}
+                  className="group cursor-pointer bg-slate-700/30 hover:bg-slate-700/50 rounded-xl p-4 transition-all duration-300 hover:scale-[1.02] border border-slate-600/30 hover:border-purple-500/50"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <div className="flex flex-wrap gap-1">
+                          <span className="text-sm text-purple-400 font-medium">{paper.categories.join(' ▪ ')}</span>
+                        </div>
+                        {paper.starred && (
+                          <Star size={16} className="text-yellow-400 fill-current" />
+                        )}
                       </div>
-                      {paper.starred && (
-                        <Star size={16} className="text-yellow-400 fill-current" />
+                      
+                      <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors">
+                        {paper.title}
+                      </h3>
+                      
+                      <div className="flex items-center space-x-2 mb-2">
+                        <span className="text-sm text-blue-400">{paper.publication}</span>
+                        <span className="text-gray-500">•</span>
+                        <span className="text-sm text-gray-400">{paper.year}</span>
+                        <span className="text-gray-500">•</span>
+                        <span className="text-sm text-gray-400">{paper.citations} citations</span>
+                        <span className="text-gray-500">•</span>
+                        <span className={`text-sm font-medium px-2 py-0.5 rounded-full text-white bg-gradient-to-r ${getCcfRankColor(paper.ccfRank)}`}>
+                          {paper.ccfRank}
+                        </span>
+                      </div>
+                      
+                      <div className="text-sm text-gray-400 mb-2">
+                        {paper.authors.join(', ')} • {paper.institute}
+                      </div>
+
+                      {/* Seminar Connection */}
+                      {seminarInfo && (
+                        <Link
+                          to={`/seminars/${seminarInfo.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center space-x-2 text-sm text-green-400 hover:text-green-300 transition-colors bg-green-400/10 px-3 py-1 rounded-full border border-green-400/20 hover:border-green-400/40"
+                        >
+                          <MessageSquare size={14} />
+                          <span>Related Seminar: {seminarInfo.title.substring(0, 30)}...</span>
+                        </Link>
                       )}
                     </div>
-                    
-                    <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors">
-                      {paper.title}
-                    </h3>
-                    
-                    <div className="flex items-center space-x-2 mb-2">
-                      <span className="text-sm text-blue-400">{paper.publication}</span>
-                      <span className="text-gray-500">•</span>
-                      <span className="text-sm text-gray-400">{paper.year}</span>
-                      <span className="text-gray-500">•</span>
-                      <span className="text-sm text-gray-400">{paper.citations} citations</span>
-                      <span className="text-gray-500">•</span>
-                      <span className={`text-sm font-medium px-2 py-0.5 rounded-full text-white bg-gradient-to-r ${getCcfRankColor(paper.ccfRank)}`}>
-                        {paper.ccfRank}
-                      </span>
+                    <div className="ml-4 flex items-center text-purple-400 group-hover:text-purple-300 transition-colors">
+                      <ExternalLink size={18} />
                     </div>
-                    
-                    <div className="text-sm text-gray-400 mb-2">
-                      {paper.authors.join(', ')} • {paper.institute}
-                    </div>
-                  </div>
-                  <div className="ml-4 flex items-center text-purple-400 group-hover:text-purple-300 transition-colors">
-                    <ExternalLink size={18} />
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -492,6 +515,26 @@ export const PaperCollectionPage: React.FC = () => {
                 <div className="text-blue-300">{selectedPaper.institute}</div>
                 <div className="text-purple-300">{selectedPaper.publication}</div>
               </div>
+
+              {/* Seminar Connection in Modal */}
+              {selectedPaper.seminar && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-white mb-2">Related Seminar</h3>
+                  {(() => {
+                    const seminarInfo = getSeminarInfo(selectedPaper.seminar);
+                    return seminarInfo ? (
+                      <Link
+                        to={`/seminars/${seminarInfo.id}`}
+                        className="inline-flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors bg-green-400/10 px-4 py-2 rounded-lg border border-green-400/20 hover:border-green-400/40"
+                      >
+                        <MessageSquare size={16} />
+                        <span>{seminarInfo.title}</span>
+                        <ExternalLink size={14} />
+                      </Link>
+                    ) : null;
+                  })()}
+                </div>
+              )}
               
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-white mb-2">Abstract</h3>
