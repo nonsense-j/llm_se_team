@@ -293,18 +293,6 @@ export const PaperCollectionPage: React.FC = () => {
               </div>
             );
           })}
-
-          {/* Year range indicator at bottom - only for selected years */}
-          {selectedYears.size > 0 && (
-            <div className="absolute bottom-4 left-0 right-0 flex justify-between px-4">
-              <div className="text-xs text-gray-400 bg-slate-800/70 px-2 py-1 rounded">
-                {Math.min(...Array.from(selectedYears))} (Oldest)
-              </div>
-              <div className="text-xs text-gray-400 bg-slate-800/70 px-2 py-1 rounded">
-                {Math.max(...Array.from(selectedYears))} (Latest)
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Legend */}
