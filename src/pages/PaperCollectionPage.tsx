@@ -300,7 +300,7 @@ export const PaperCollectionPage: React.FC = () => {
           <div className="flex flex-wrap gap-4 text-sm text-gray-300">
             <div className="flex items-center space-x-2">
               <div className="w-4 h-4 rounded-full border-2 border-yellow-400/60 flex items-center justify-center">
-                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-grey-500 rounded-full"></div>
               </div>
               <span>Starred</span>
             </div>
