@@ -24,7 +24,7 @@ export const seminars: Seminar[] = [
     date: '2025-07-02',
     time: '14:00-17:00',
     participant: 'LLM&SE全体成员',
-    location: '会议室A',
+    location: '会议室337',
     description: '本次研讨会将深入探讨大语言模型在自动代码生成领域的最新进展，包括模型架构优化、训练策略改进以及在实际软件开发中的应用案例。我们将分析当前技术的局限性，讨论未来的发展方向，并探索如何提高代码生成的准确性和实用性。',
     preparation: [
       '阅读论文：《Large Language Models for Code Generation: A Comprehensive Survey》',
@@ -44,7 +44,7 @@ export const seminars: Seminar[] = [
     date: '2025-06-25',
     time: '12:00-17:00',
     participant: 'LLM&SE全体成员',
-    location: '在线会议',
+    location: '会议室337',
     description: '探讨基于机器学习和深度学习的软件漏洞自动检测技术，分析静态分析与动态分析的结合方法，讨论如何提高漏洞检测的准确率和覆盖率。',
     preparation: [
       '阅读论文：《Automated Vulnerability Detection in Open Source Software》',
