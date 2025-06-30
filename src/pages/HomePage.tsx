@@ -7,7 +7,7 @@ import { papers } from '../data/papers';
 export const HomePage: React.FC = () => {
   const seminarCount = seminars.length;
   const paperCount = papers.length;
-  const uniqueCategories = [...new Set(papers.map(paper => paper.categories))].length;
+  const uniqueCategories = new Set(papers.flatMap(paper => paper.categories)).size;
 
   return (
     <div className="min-h-screen">
