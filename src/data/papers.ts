@@ -46,7 +46,8 @@ export const papers: Paper[] = [
     url: "https://openreview.net/forum?id=hkNnGqZnpa", 
     artifactUrl: "https://github.com/codefuse-ai/Awesome-Code-LLM",
     publication: "TMLR",
-    ccfRank: "CCF-N"
+    ccfRank: "CCF-N",
+    starred: true
   },
   {
     id: '2',
@@ -118,7 +119,27 @@ export const papers: Paper[] = [
     ccfRank: "CCF-A"
   },
   {
-    id: '5',
+    id: '8',
+    title: "Boosting Static Resource Leak Detection via LLM-based Resource-Oriented Intention Inference",
+    authors: ["Chong Wang", "Jianan Liu", "Xin Peng", "Yang Liu", "Yiling Lou"],
+    institute: "Fudan University; Nanyang Technological University",
+    abstract: "This paper addresses the limitations of existing static resource leak detection techniques, which suffer from false negatives due to incomplete API pair definitions and false positives from inadequate reachability validation. The authors propose INFERROI, a novel approach that leverages Large Language Models (LLMs) to infer resource-oriented intentions (acquisition, release, and reachability validation) directly from code. INFERROI combines LLM-based intention inference with a two-stage static analysis: first identifying leak-risky paths using inferred API pairs, then pruning false positives through reachability validation. Evaluated on DroidLeaks and JLeaks datasets, INFERROI achieves detection rates of 59.3% and 62.5% with low false alarm rates (18.6-19.5%), outperforming industrial tools by detecting 14-485 additional bugs. In real-world projects, it found 29 previously unknown leaks (7 confirmed by developers). The approach demonstrates 74.6% precision and 81.8% recall in intention inference, covering over 60% of resource types in benchmark datasets.",
+    keywords: [
+        "Resource Leak Detection",
+        "Large Language Models",
+        "Static Analysis",
+        "Intention Inference"
+    ],
+    year: 2025, 
+    categories: ["Analysis", "Security"],
+    citations: 15, // Placeholder for arXiv preprint
+    url: "https://arxiv.org/abs/2311.04448", // arXiv reference
+    artifactUrl: "https://github.com/cs-wangchong/InferROI-Replication", // No artifact mentioned
+    publication: "ICSE", // Preprint
+    ccfRank: "CCF-A" // Preprint (no conference affiliation)
+  },
+  {
+    id: '6',
     title: "Generating API Parameter Security Rules with LLM for API Misuse Detection",
     authors: ["Jinghua Liu", "Yi Yang", "Kai Chen", "Miaoqian Lin"],
     institute: "IIE CAS",
@@ -134,7 +155,7 @@ export const papers: Paper[] = [
     seminar: '1'
   },
   {
-    id: '6',
+    id: '7',
     title: "Uncovering the iceberg from the tip: Generating API Specifications for Bug Detection via Specification Propagation Analysis",
     authors: ["Miaoqian Lin", "Kai Chen", "Yi Yang", "Jinghua Liu"],
     institute: "IIE CAS",
@@ -150,7 +171,7 @@ export const papers: Paper[] = [
     seminar: '1'
   },
   {
-    id: '7',
+    id: '8',
     title: "AURC: Detecting Errors in Program Code and Documentation",
     authors: ["Pelwei Hu", "Ruigang Liang", "Ying Cao", "Kai Chen", "Runze Zhang"],
     institute: "IIE CAS; BAAI",
@@ -166,7 +187,7 @@ export const papers: Paper[] = [
     seminar: '1'
   },
   {
-    id: '8',
+    id: '9',
     title: "The Midas Touch: Triggering the Capability of LLMs for RM-API Misuse Detection",
     authors: ["Yi Yang", "Jinghua Liu", "Kai Chen", "Miaoqian Lin"],
     institute: "IIE CAS",

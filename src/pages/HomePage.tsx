@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, BookOpen, Users, Star, ArrowRight } from 'lucide-react';
+import { Calendar, BookOpen, Star, ArrowRight } from 'lucide-react';
 import { seminars } from '../data/seminars';
 import { papers } from '../data/papers';
 
 export const HomePage: React.FC = () => {
   const seminarCount = seminars.length;
   const paperCount = papers.length;
-  const uniqueCategories = new Set(papers.flatMap(paper => paper.categories)).size - 1;
+  const uniqueCategories = new Set(papers.flatMap(paper => paper.categories)).size;
 
   return (
     <div className="min-h-screen">

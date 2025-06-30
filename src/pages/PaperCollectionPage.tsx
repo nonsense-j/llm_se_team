@@ -1,13 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Star, Users, Calendar, ExternalLink, X, BookOpen, MessageSquare } from 'lucide-react';
+import { Search, Star, Users, Calendar, ExternalLink, X, BookOpen, Landmark, MessagesSquare } from 'lucide-react';
 import { papers, Paper, PAPER_CATEGORIES } from '../data/papers';
 import { seminars } from '../data/seminars';
 
 export const PaperCollectionPage: React.FC = () => {
-  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set(['All']));
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set(PAPER_CATEGORIES));
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPaper, setSelectedPaper] = useState<Paper | null>(null);
+  const [showStarredOnly, setShowStarredOnly] = useState(false);
   
   // Get all unique years from paper data (only actual years from data)
   const availableYears = useMemo(() => {
@@ -18,15 +19,30 @@ export const PaperCollectionPage: React.FC = () => {
   // Track selected years (initially all years are selected)
   const [selectedYears, setSelectedYears] = useState<Set<number>>(new Set(availableYears));
 
+  // Get seminar info for a paper
+  const getSeminarInfo = (seminarId: string) => {
+    if (!seminarId || !seminars) {
+      return undefined;
+    }
+    return seminars.find(s => s.id === seminarId);
+  };
+
   const filteredPapers = papers.filter(paper => {
+    // Starred filter
+    if (showStarredOnly && !paper.starred) {
+      return false;
+    }
+
     // Category filtering with multi-select logic
-    const matchesCategory = selectedCategories.has('All') || 
-                           (selectedCategories.has('Starred') && paper.starred) ||
-                           paper.categories.some(category => selectedCategories.has(category));
-    
-    const matchesSearch = paper.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         paper.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                         paper.categories.some(category => category.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCategory = paper.categories.some(category => selectedCategories.has(category));
+
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    const matchesSearch = searchTerm === '' || (
+      paper.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (paper.keywords.some(keyword => keyword.toLowerCase().includes(lowerSearchTerm))) ||
+      (paper.categories && paper.categories.some(category => category.toLowerCase().includes(lowerSearchTerm))) ||
+      (paper.seminar && getSeminarInfo(paper.seminar)?.title.toLowerCase().includes(lowerSearchTerm))
+    );
     const matchesYear = selectedYears.has(paper.year);
     return matchesCategory && matchesSearch && matchesYear;
   });
@@ -34,7 +50,7 @@ export const PaperCollectionPage: React.FC = () => {
   // Calculate year distribution for width allocation (only for selected years)
   const yearDistribution = useMemo(() => {
     const distribution = new Map<number, number>();
-    papers.forEach(paper => {
+    filteredPapers.forEach(paper => {
       distribution.set(paper.year, (distribution.get(paper.year) || 0) + 1);
     });
     
@@ -56,9 +72,10 @@ export const PaperCollectionPage: React.FC = () => {
     }
 
     // Ensure a minimum width for visibility if needed, and re-normalize
-    const minWidth = 5; // Minimum percentage width for a year column
+    const minWidth = 6;
     let remainingWidth = 100;
     let yearsToAdjust = yearData.filter(yd => yd.width < minWidth);
+    const largerYears = yearData.filter(yd => yd.width >= minWidth);
 
     if (yearsToAdjust.length > 0) {
       // Assign minimum width to small columns
@@ -68,7 +85,6 @@ export const PaperCollectionPage: React.FC = () => {
       });
 
       // Distribute remaining width among larger columns
-      const largerYears = yearData.filter(yd => yd.width >= minWidth);
       const currentLargerWidth = largerYears.reduce((sum, yd) => sum + yd.width, 0);
 
       if (currentLargerWidth > 0) {
@@ -79,10 +95,10 @@ export const PaperCollectionPage: React.FC = () => {
     }
 
     return yearData;
-  }, [selectedYears]);
+  }, [selectedYears, filteredPapers]);
 
   // Position papers based on year (left to right chronologically) - only for selected years
-  const getPositionForPaper = (paper: Paper, index: number) => {
+  const getPositionForPaper = (paper: Paper) => {
     const yearData = yearDistribution.find(yd => yd.year === paper.year);
     if (!yearData) return { left: '50%', top: '50%' };
     
@@ -106,21 +122,6 @@ export const PaperCollectionPage: React.FC = () => {
     
     return { left: `${x}%`, top: `${y}%` };
   };
-
-  const getCategoryColor = (category: string) => {
-   const colors = [
-     'from-blue-500 to-blue-700',
-     'from-purple-500 to-purple-700',
-     'from-green-500 to-green-700',
-     'from-red-500 to-red-700',
-     'from-yellow-500 to-yellow-700',
-     'from-pink-500 to-pink-700',
-     'from-indigo-500 to-indigo-700',
-     'from-teal-500 to-teal-700',
-   ];
-   const hash = category.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
-   return colors[hash % colors.length];
- };
    
   // Get color based on CCF rank
   const getCcfRankColor = (ccfRank: string) => {
@@ -161,54 +162,37 @@ export const PaperCollectionPage: React.FC = () => {
   // Handle category selection with multi-select logic
   const handleCategorySelect = (category: string) => {
     const newSelectedCategories = new Set(selectedCategories);
-    
+
     if (category === 'All') {
-      // If "All" is clicked, select all categories including "All" and "Starred"
-      setSelectedCategories(new Set(['All', 'Starred', ...PAPER_CATEGORIES]));
-    } else {
-      // Remove "All" if it's selected and we're selecting a specific category
-      if (newSelectedCategories.has('All')) {
-        newSelectedCategories.delete('All');
+      const allCategoriesSelected = PAPER_CATEGORIES.every(cat => newSelectedCategories.has(cat));
+      if (allCategoriesSelected) {
+        // If 'All' is currently selected and all categories are selected, deselect all
+        newSelectedCategories.clear();
+      } else {
+        PAPER_CATEGORIES.forEach(cat => newSelectedCategories.add(cat));
       }
-      
+    } else {
       // Toggle the clicked category
       if (newSelectedCategories.has(category)) {
         newSelectedCategories.delete(category);
       } else {
         newSelectedCategories.add(category);
       }
-      
-      // If no categories are selected, default back to "All"
-      if (newSelectedCategories.size === 0) {
-        newSelectedCategories.add('All');
-      }
-      
-      setSelectedCategories(newSelectedCategories);
     }
+    setSelectedCategories(newSelectedCategories);
   };
 
   // Get button style based on selection state
   const getButtonStyle = (category: string) => {
-    const isSelected = selectedCategories.has(category);
-    
     if (category === 'All') {
-      return isSelected
+      return PAPER_CATEGORIES.every(cat => selectedCategories.has(cat))
         ? 'bg-purple-500 text-white'
         : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50';
-    } else if (category === 'Starred') {
-      return isSelected
-        ? 'bg-red-500 text-white'
-        : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50';
     } else {
-      return isSelected
+      return selectedCategories.has(category)
         ? 'bg-blue-500 text-white'
         : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50';
     }
-  };
-
-  // Get seminar info for a paper
-  const getSeminarInfo = (seminarId: string) => {
-    return seminars.find(s => s.id === seminarId);
   };
 
   return (
@@ -232,7 +216,7 @@ export const PaperCollectionPage: React.FC = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
             <input
               type="text"
-              placeholder="Search papers by title, keywords, or categories..."
+              placeholder="Search papers by title, keywords, seminar title or categories..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
@@ -246,16 +230,7 @@ export const PaperCollectionPage: React.FC = () => {
             >
               All
             </button>
-            
-            {/* Starred button */}
-            <button
-              onClick={() => handleCategorySelect('Starred')}
-              className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors flex items-center space-x-1 ${getButtonStyle('Starred')}`}
-            >
-              <Star size={16} className={selectedCategories.has('Starred') ? 'fill-current' : ''} />
-              <span>Starred</span>
-            </button>
-            
+                      
             {/* Category buttons */}
             {PAPER_CATEGORIES.map(category => (
               <button
@@ -266,6 +241,16 @@ export const PaperCollectionPage: React.FC = () => {
                 {category}
               </button>
             ))}
+            {/* Starred button */}
+            <button
+              onClick={() => {
+                setShowStarredOnly(!showStarredOnly);
+              }}
+              className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors flex items-center space-x-1 ${showStarredOnly ? 'bg-yellow-500 text-white' : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50'}`}
+            >
+              <Star size={16} className={showStarredOnly ? 'fill-current' : ''} />
+              <span>Starred</span>
+            </button>
           </div>
         </div>
 
@@ -348,7 +333,7 @@ export const PaperCollectionPage: React.FC = () => {
                 style={{ left: `${cumulativeWidth + yearData.width / 2}%` }}
               >
                 <div className="text-center">
-                  <div className="text-sm font-bold text-white">{yearData.year}</div>
+                  <div className="text-xs font-bold  text-purple-300">{yearData.year}</div>
                   <div className="text-xs text-purple-300">(#{yearData.count})</div>
                 </div>
               </div>
@@ -356,8 +341,8 @@ export const PaperCollectionPage: React.FC = () => {
           })}
 
           {/* Paper stars - only for filtered papers (which already includes year filtering) */}
-          {filteredPapers.map((paper, index) => {
-            const position = getPositionForPaper(paper, index);
+          {filteredPapers.map((paper) => {
+            const position = getPositionForPaper(paper);
             const size = Math.max(16, Math.min(28, paper.citations / 8));
             const colorClass = getCcfRankColor(paper.ccfRank);
             
@@ -439,9 +424,8 @@ export const PaperCollectionPage: React.FC = () => {
             Paper Collection ({filteredPapers.length})
           </h2>
           <div className="grid gap-4">
-            {filteredPapers.map((paper) => {
+            {[...filteredPapers].reverse().map((paper) => {
               const seminarInfo = paper.seminar ? getSeminarInfo(paper.seminar) : null;
-              
               return (
                 <div
                   key={paper.id}
@@ -452,7 +436,7 @@ export const PaperCollectionPage: React.FC = () => {
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
                         <div className="flex flex-wrap gap-1">
-                          <span className="text-sm text-purple-400 font-medium">{paper.categories.join(' ▪ ')}</span>
+                          <span style={{ whiteSpace: 'pre' }} className="text-sm text-purple-400 font-medium">{paper.categories.join('  ▪  ')}</span>
                         </div>
                         {paper.starred && (
                           <Star size={16} className="text-yellow-400 fill-current" />
@@ -474,9 +458,15 @@ export const PaperCollectionPage: React.FC = () => {
                           {paper.ccfRank}
                         </span>
                       </div>
-                      
-                      <div className="text-sm text-gray-400 mb-2">
-                        {paper.authors.join(', ')} • {paper.institute}
+                                          
+                      <div className="text-sm text-gray-300 flex mb-2">
+                        <Users size={14} className="mr-2" />
+                        {paper.authors.join(', ')}
+                      </div>
+
+                      <div className="text-sm text-gray-300 flex mb-2">
+                        <Landmark size={14} className="mr-2" />
+                        {paper.institute}
                       </div>
 
                       {/* Seminar Connection */}
@@ -486,8 +476,8 @@ export const PaperCollectionPage: React.FC = () => {
                           onClick={(e) => e.stopPropagation()}
                           className="inline-flex items-center space-x-2 text-sm text-green-400 hover:text-green-300 transition-colors bg-green-400/10 px-3 py-1 rounded-full border border-green-400/20 hover:border-green-400/40"
                         >
-                          <MessageSquare size={14} />
-                          <span>Related Seminar: {seminarInfo.title.substring(0, 30)}...</span>
+                          <MessagesSquare size={14} />
+                          <span>Seminar: {seminarInfo.title.substring(0, 30)}...</span>
                         </Link>
                       )}
                     </div>
@@ -510,7 +500,7 @@ export const PaperCollectionPage: React.FC = () => {
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center space-x-2">
                   <div className="flex flex-wrap gap-1">
-                    <span className="text-sm text-purple-400 font-medium">{selectedPaper.categories.join(' ▪ ')}</span>
+                    <span style={{ whiteSpace: 'pre' }} className="text-sm text-purple-400 font-medium">{selectedPaper.categories.join('  ▪  ')}</span>
                   </div>
                   {selectedPaper.starred && (
                     <Star size={16} className="text-yellow-400 fill-current" />
@@ -524,41 +514,39 @@ export const PaperCollectionPage: React.FC = () => {
                 </button>
               </div>
               
-              <h2 className="text-2xl font-bold text-white mb-4">{selectedPaper.title}</h2>
+              <h2 className="text-2xl font-bold text-white mb-3">{selectedPaper.title}</h2>
               
-              <div className="flex items-center space-x-4 mb-4 text-gray-300 text-sm">
-                <div className="flex items-center">
-                  <Users size={16} className="mr-1" />
-                  {selectedPaper.authors.join(', ')}
-                </div>
-                <div className="flex items-center">
-                  <Calendar size={16} className="mr-1" />
-                  {selectedPaper.year}
-                </div>
-                <div className={`px-2 py-1 rounded-full text-white bg-gradient-to-r ${getCcfRankColor(selectedPaper.ccfRank)}`}>
+              <div className="items-center text-gray-300 flex mb-2">
+                <Users size={16} className="mr-3" />
+                {selectedPaper.authors.join(', ')}
+              </div>
+
+              <div className="items-center text-gray-300 flex mb-2">
+                <Landmark size={16} className="mr-3" />
+                {selectedPaper.institute}
+              </div>
+
+              <div className="flex items-center text-red-300 space-x-2 mb-4 text-gray-300 text-sm">
+                <Calendar size={16} className="mr-1" />
+                <span>{selectedPaper.publication} • {selectedPaper.year}</span>
+                <div className={`px-2 py-0 rounded text-white bg-gradient-to-r ${getCcfRankColor(selectedPaper.ccfRank)}`}>
                   {selectedPaper.ccfRank}
                 </div>
-              </div>
-              
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-blue-300">{selectedPaper.institute}</div>
-                <div className="text-purple-300">{selectedPaper.publication}</div>
               </div>
 
               {/* Seminar Connection in Modal */}
               {selectedPaper.seminar && (
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-white mb-2">Related Seminar</h3>
+                <div className="mb-5">
                   {(() => {
                     const seminarInfo = getSeminarInfo(selectedPaper.seminar);
                     return seminarInfo ? (
                       <Link
                         to={`/seminars/${seminarInfo.id}`}
-                        className="inline-flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors bg-green-400/10 px-4 py-2 rounded-lg border border-green-400/20 hover:border-green-400/40"
+                        className="inline-flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors bg-green-400/10 px-2 py-1 rounded-lg border border-green-400/20 hover:border-green-400/40"
                       >
-                        <MessageSquare size={16} />
+                        <MessagesSquare size={16} />
                         <span>{seminarInfo.title}</span>
-                        <ExternalLink size={14} />
+                        <ExternalLink size={16} />
                       </Link>
                     ) : null;
                   })()}
@@ -568,17 +556,6 @@ export const PaperCollectionPage: React.FC = () => {
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-white mb-2">Abstract</h3>
                 <p className="text-gray-300 leading-relaxed">{selectedPaper.abstract}</p>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-2">Categories</h3>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {selectedPaper.categories.map(category => (
-                    <span key={category} className={`px-3 py-1 bg-gradient-to-r ${getCategoryColor(category)} text-white rounded-full text-sm font-medium`}>
-                      {category}
-                    </span>
-                  ))}
-                </div>
               </div>
               
               <div className="mb-6">

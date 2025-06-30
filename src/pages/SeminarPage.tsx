@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, Users, ArrowRight, MessageSquare } from 'lucide-react';
+import { Calendar, Clock, Users, ArrowRight, MessagesSquare } from 'lucide-react';
 import { seminars, type Seminar } from '../data/seminars';
 
 export const SeminarPage: React.FC = () => {
@@ -82,7 +82,7 @@ export const SeminarPage: React.FC = () => {
 
         {/* Seminars Flow */}
         <div className="space-y-6">
-          {displayedSeminars.map((seminar, index) => {
+          {displayedSeminars.map((seminar) => {
             const status = getStatus(seminar);
             return (
               <Link
@@ -110,7 +110,9 @@ export const SeminarPage: React.FC = () => {
                       </div>
                       
                       <h3 className="text-xl font-bold text-white mb-2 flex group-hover:text-blue-300 transition-colors">
-                        <MessageSquare size={25} className="mr-3 text-blue-400" />
+                        <MessagesSquare size={25} className="mr-3 text-blue-400" />
+                        {seminar.id}
+                        <span className='ml-2 mr-2'>▪</span>
                         {seminar.title}
                       </h3>
                       
