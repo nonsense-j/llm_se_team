@@ -29,11 +29,11 @@ export const papers: Paper[] = [
     keywords: ["Neuro-Symbolic", "Program Analysis", "Security Vulnerability", "LLM"],
     year: 2025,
     categories: ["Security", "Analysis"],
-    citations: 4, // Assuming this is a new paper; adjust if known
+    citations: 4, 
     url: "https://openreview.net/forum?id=9LdJDU7E91",
     artifactUrl: "https://github.com/iris-sast/iris",
-    publication: "Unknown", // Conference/journal not specified in the abstract
-    ccfRank: "CCF-N" // Assuming unknown; adjust if known
+    publication: "ICLR", 
+    ccfRank: "CCF-A"
   },
   {
     id: '1',
