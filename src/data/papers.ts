@@ -21,7 +21,7 @@ export const PAPER_CATEGORIES = ["Code Generation", "Testing", "Security", "Anal
 
 export const papers: Paper[] = [
   {
-    id: 2,
+    id: 1,
     title: "Unifying the Perspectives of NLP and Software Engineering: A Survey on Language Models for Code",
     authors: [
         "Ziyin Zhang", 
@@ -42,8 +42,8 @@ export const papers: Paper[] = [
     ],
     year: 2024,
     categories: ["Survey", "Code Generation", "Testing", "Security", "Analysis"],
-    citations: 84, 
-    url: "https://github.com/codefuse-ai/Awesome-Code-LLM", 
+    citations: 84,
+    url: "https://openreview.net/forum?id=hkNnGqZnpa", 
     artifactUrl: "https://github.com/codefuse-ai/Awesome-Code-LLM",
     publication: "TMLR",
     ccfRank: "CCF-N"
