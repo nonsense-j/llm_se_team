@@ -114,11 +114,6 @@ export const SeminarPage: React.FC = () => {
                         {seminar.title}
                       </h3>
                       
-                      <p className="text-lg text-blue-300 mb-3 font-medium flex items-center">
-                        <MessageSquare size={18} className="mr-2 text-blue-400" />
-                        讨论主题
-                      </p>
-                      
                       <div className="flex items-center text-gray-400 text-sm mb-3">
                         <Users size={16} className="mr-1" />
                         参会人：{seminar.participant}
