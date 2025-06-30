@@ -28,10 +28,10 @@ export const papers: Paper[] = [
     abstract: "This paper addresses the challenge of automatically generating API Parameter Security Rules (APSRs) to detect API misuse, which can lead to severe security issues like null pointer dereference and memory corruption. Existing methods suffer from missing information and limited heuristics. The authors propose GPTAid, a framework leveraging Large Language Models (LLMs) to analyze API source code and generate APSRs. GPTAid employs execution feedback-checking to validate generated APSRs by dynamically executing violation code and filtering incorrect rules. It further refines APSRs through code differential analysis to ensure precision. Evaluated on 200 APIs from eight popular libraries, GPTAid achieves 92.3% precision and generates 6 times more APSRs than state-of-the-art detectors. Additionally, it discovered 210 unknown security bugs in 47 applications, with 150 confirmed by developers.",
     keywords: ["API Misuse", "API Parameter Security Rules", "Large Language Models"],
     year: 2025, // Assuming current year based on submission context
-    categories: ["Security"],
+    categories: ["Security", "Analysis"],
     citations: 0, // Placeholder, actual citations unknown
     url: "https://www.ndss-symposium.org/ndss-paper/generating-api-parameter-security-rules-with-llm-for-api-misuse-detection/",
-    artifactUrl: undefined, // No artifact URL provided
+    artifactUrl: "https://github.com/icy17/GPTAid/", // No artifact URL provided
     publication: "NDSS", 
     ccfRank: "CCF-A"
   }
