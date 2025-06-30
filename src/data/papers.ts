@@ -32,7 +32,7 @@ export const papers: Paper[] = [
     citations: 0, // Placeholder, actual citations unknown
     url: "https://www.ndss-symposium.org/ndss-paper/generating-api-parameter-security-rules-with-llm-for-api-misuse-detection/",
     artifactUrl: undefined, // No artifact URL provided
-    publication: "conference", 
-    ccfRank: "CCF-B"
+    publication: "NDSS", 
+    ccfRank: "CCF-A"
   }
 ];
