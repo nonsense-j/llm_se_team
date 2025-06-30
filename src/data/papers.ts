@@ -42,8 +42,8 @@ export const papers: Paper[] = [
     ],
     year: 2024,
     categories: ["Survey", "Code Generation", "Testing", "Security", "Analysis"],
-    citations: 84, // Assuming pre-print (update if known)
-    url: "https://github.com/codefuse-ai/Awesome-Code-LLM", // Placeholder (no DOI/publisher link provided)
+    citations: 84, 
+    url: "https://github.com/codefuse-ai/Awesome-Code-LLM", 
     artifactUrl: "https://github.com/codefuse-ai/Awesome-Code-LLM",
     publication: "TMLR",
     ccfRank: "CCF-N"
