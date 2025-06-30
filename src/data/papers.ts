@@ -145,8 +145,9 @@ export const papers: Paper[] = [
     citations: 0, // Placeholder (update if known)
     url: "https://www.ndss-symposium.org/ndss-paper/uncovering-the-iceberg-from-the-tip-generating-api-specifications-for-bug-detection-via-specification-propagation-analysis/", // No URL provided
     artifactUrl: undefined, // No artifact mentioned
-    publication: "NDSS", // Conference/journal not specified
-    ccfRank: "CCF-A" // Default (update if venue known)
+    publication: "NDSS", 
+    ccfRank: "CCF-A",
+    seminar: '1'
   },
   {
     id: '7',
