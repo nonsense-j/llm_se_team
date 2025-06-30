@@ -76,7 +76,34 @@ export const papers: Paper[] = [
     ccfRank: "CCF-A" // Default (update if venue is known)
   },
   {
-    id: "3",
+    id: 3,
+    title: "Large Language Model-Based Agents for Software Engineering: A Survey",
+    authors: [
+        "Junwei Liu", 
+        "Kaixin Wang", 
+        "Yixuan Chen", 
+        "Xin Peng", 
+        "Zhenpeng Chen", 
+        "Lingming Zhang", 
+        "Yiling Lou"
+    ],
+    institute: "Fudan University; Nanyang Technological University; University of Illinois Urbana-Champaign",
+    abstract: "This survey explores the emerging paradigm of LLM-based agents in Software Engineering (SE), analyzing 106 papers that leverage these agents for tasks like code generation, testing, and debugging. Unlike standalone LLMs, LLM-based agents enhance versatility by integrating external tools and enabling multi-agent collaboration. The paper categorizes applications from two perspectives: (1) SE tasks (requirements engineering, code generation, testing, etc.) and (2) agent design components (planning, memory, perception). It highlights the synergy between multi-agent systems and human interaction for complex SE problems, identifies current limitations, and outlines future research directions. The work serves as the first comprehensive review of LLM-based agents in SE.",
+    keywords: [
+        "Large Language Model", 
+        "AI Agent", 
+        "Software Engineering"
+    ],
+    year: 2024,
+    categories: ["Survey", "Code Generation", "Testing", "Security", "Maintenance", "Analysis"],
+    citations: 0, // Placeholder for a newly published survey
+    url: "https://arxiv.org/abs/2409.02977",
+    artifactUrl: "https://github.com/FudanSELab/Agent4SE-Paper-List",
+    publication: "Arxiv", // Conference/journal not specified
+    ccfRank: "CCF-N" // Default (update if venue is known)
+  },
+  {
+    id: "4",
     title: "IRIS: LLM-Assisted Static Analysis for Detecting Security Vulnerabilities",
     authors: ["Ziyang Li", "Salkat Dutta", "Mayur Naik"],
     institute: "University of Pennsylvania, Cornell University",
@@ -91,7 +118,7 @@ export const papers: Paper[] = [
     ccfRank: "CCF-A"
   },
   {
-    id: '4',
+    id: '5',
     title: "Generating API Parameter Security Rules with LLM for API Misuse Detection",
     authors: ["Jinghua Liu", "Yi Yang", "Kai Chen", "Miaoqian Lin"],
     institute: "Institute of Information Engineering, Chinese Academy of Sciences, China",
@@ -105,19 +132,6 @@ export const papers: Paper[] = [
     publication: "NDSS", 
     ccfRank: "CCF-A"
   },
-  {
-    id: '5',
-    title: "Generating API Parameter Security Rules with LLM for API Misuse Detection",
-    authors: ["Jinghua Liu", "Yi Yang", "Kai Chen", "Miaoqian Lin"],
-    institute: "Institute of Information Engineering, Chinese Academy of Sciences, China",
-    abstract: "This paper addresses the challenge of automatically generating API Parameter Security Rules (APSRs) to detect API misuse, which can lead to severe security issues like null pointer dereference and memory corruption. Existing methods suffer from missing information and limited heuristics. The authors propose GPTAid, a framework leveraging Large Language Models (LLMs) to analyze API source code and generate APSRs. GPTAid employs execution feedback-checking to validate generated APSRs by dynamically executing violation code and filtering incorrect rules. It further refines APSRs through code differential analysis to ensure precision. Evaluated on 200 APIs from eight popular libraries, GPTAid achieves 92.3% precision and generates 6 times more APSRs than state-of-the-art detectors. Additionally, it discovered 210 unknown security bugs in 47 applications, with 150 confirmed by developers.",
-    keywords: ["API Misuse", "API Parameter Security Rules", "Large Language Models"],
-    year: 2025, // Assuming current year based on submission context
-    categories: ["Security"],
-    citations: 0, // Placeholder, actual citations unknown
-    url: "https://www.ndss-symposium.org/ndss-paper/generating-api-parameter-security-rules-with-llm-for-api-misuse-detection/",
-    artifactUrl: "https://github.com/icy17/GPTAid/", // No artifact URL provided
-    publication: "NDSS", 
-    ccfRank: "CCF-A"
-  }
+  
+  
 ];
