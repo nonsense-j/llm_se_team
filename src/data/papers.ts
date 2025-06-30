@@ -106,7 +106,7 @@ export const papers: Paper[] = [
     id: "4",
     title: "IRIS: LLM-Assisted Static Analysis for Detecting Security Vulnerabilities",
     authors: ["Ziyang Li", "Salkat Dutta", "Mayur Naik"],
-    institute: "University of Pennsylvania, Cornell University",
+    institute: "University of Pennsylvania; Cornell University",
     abstract: "This paper addresses the challenge of detecting security vulnerabilities in software using static analysis tools, which often suffer from limited effectiveness due to their reliance on human-labeled specifications. The authors propose IRIS, a neuro-symbolic approach that combines Large Language Models (LLMs) with static analysis to perform whole-repository reasoning for vulnerability detection. IRIS leverages LLMs to infer taint specifications and perform contextual analysis, eliminating the need for manual specifications. Evaluated on CWE-Bench-Java, a new dataset of 120 manually validated security vulnerabilities in real-world Java projects, IRIS with GPT-4 detects 55 vulnerabilities (+28 over CodeQL) and reduces CodeQL's false discovery rate by 5%. Additionally, IRIS identifies 4 previously unknown vulnerabilities missed by existing tools.",
     keywords: ["Neuro-Symbolic", "Program Analysis", "Security Vulnerability", "LLM"],
     year: 2025,
@@ -125,7 +125,7 @@ export const papers: Paper[] = [
     abstract: "This paper addresses the challenge of automatically generating API Parameter Security Rules (APSRs) to detect API misuse, which can lead to severe security issues like null pointer dereference and memory corruption. Existing methods suffer from missing information and limited heuristics. The authors propose GPTAid, a framework leveraging Large Language Models (LLMs) to analyze API source code and generate APSRs. GPTAid employs execution feedback-checking to validate generated APSRs by dynamically executing violation code and filtering incorrect rules. It further refines APSRs through code differential analysis to ensure precision. Evaluated on 200 APIs from eight popular libraries, GPTAid achieves 92.3% precision and generates 6 times more APSRs than state-of-the-art detectors. Additionally, it discovered 210 unknown security bugs in 47 applications, with 150 confirmed by developers.",
     keywords: ["API Misuse", "API Parameter Security Rules", "Large Language Models"],
     year: 2025,
-    categories: ["Security", "Analysis"],
+    categories: ["Security"],
     citations: 7,
     url: "https://www.ndss-symposium.org/ndss-paper/generating-api-parameter-security-rules-with-llm-for-api-misuse-detection/",
     artifactUrl: "https://github.com/icy17/GPTAid/", 
@@ -140,7 +140,7 @@ export const papers: Paper[] = [
     abstract: "This paper addresses the challenge of detecting API misuse bugs caused by incomplete API specifications. Existing methods extract specifications from documentation, usage patterns, or patches but suffer from coverage gaps. The authors propose API Specification Propagation – the observation that specifications propagate through hierarchical API call chains. They introduce APISpecGen, which starts with seed specifications and performs bidirectional propagation analysis to generate new specifications. APISpecGen combines API usage context and validates specifications via data-flow analysis, iteratively expanding coverage. Evaluated on Linux kernel APIs, APISpecGen generated 7,332 specifications from just 6 seeds, detecting 186 new bugs (113 confirmed by developers, 8 assigned CVEs). This significantly outperforms state-of-the-art specification extraction methods.",
     keywords: ["API Specifications", "Bug Detection", "API Misuse", "Data-flow Analysis"],
     year: 2025, 
-    categories: ["Security", "Analysis"],
+    categories: ["Security"],
     citations: 0, // Placeholder (update if known)
     url: "https://www.ndss-symposium.org/ndss-paper/uncovering-the-iceberg-from-the-tip-generating-api-specifications-for-bug-detection-via-specification-propagation-analysis/", // No URL provided
     artifactUrl: undefined, // No artifact mentioned
@@ -154,11 +154,11 @@ export const papers: Paper[] = [
     institute: "IIE CAS; BAAI",
     abstract: "This paper addresses limitations in existing vulnerability detection methods that either assume documentation correctness or rely on majority voting, leading to missed bugs when documentation is defective or correct usage is rare. The authors propose AURC, a static framework that mutually corroborates three objects: API documentation, caller code (API-invoking code), and callee code (API source code). AURC combines context-sensitive backward analysis for callee processing, a pretrained document classifier, and caller condition collection to cross-validate results. This eliminates dependency on documentation assumptions or usage frequency. Evaluated on ten codebases, AURC discovered 529 security bugs (e.g., heap buffer overflow) and 224 documentation defects, with 222 code patches and 76 documentation patches accepted by maintainers.",
     keywords: ["Error Detection", "Code Bugs", "Document Defects", "Static Analysis", "API Invocation"],
-    year: 2023, // USENIX Security '23
-    categories: ["Security", "Analysis"],
-    citations: 0, // Placeholder (update if known)
-    url: undefined, // No direct paper link provided
-    artifactUrl: undefined, // No artifact mentioned
+    year: 2023,
+    categories: ["Security"],
+    citations: 5, // Placeholder (update if known)
+    url: "https://www.usenix.org/conference/usenixsecurity23/presentation/hu", // No direct paper link provided
+    artifactUrl: "https://github.com/PeiweiHu/AURC", // No artifact mentioned
     publication: "USENIX Security", // Explicitly mentioned
     ccfRank: "CCF-A" // USENIX Security is CCF-A
 }
