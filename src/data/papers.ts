@@ -49,6 +49,33 @@ export const papers: Paper[] = [
     ccfRank: "CCF-N"
   },
   {
+    id: 2,
+    title: "Software Testing with Large Language Models: Survey, Landscape, and Vision",
+    authors: [
+        "Junjie Wang", 
+        "Yuchao Huang", 
+        "Chunyang Chen", 
+        "Zhe Liu", 
+        "Song Wang", 
+        "Qing Wang"
+    ],
+    institute: "Institute of Software Chinese Academy of Sciences; University of Chinese Academy of Sciences; Monash University; York University",
+    abstract: "This survey paper explores the application of Large Language Models (LLMs) in software testing, analyzing 102 studies that leverage LLMs for tasks like test case preparation and program repair. The authors examine the intersection of LLMs and software testing from dual perspectives, detailing commonly used models (e.g., GPT, T5), prompt engineering techniques, and auxiliary methods. As software systems grow in complexity, traditional testing approaches face limitations in coverage and semantic understanding, which LLMs address through their scalability and NLP capabilities. The paper identifies key challenges and opportunities, serving as a roadmap for future research in LLM-driven testing innovation.",
+    keywords: [
+        "Pre-trained Large Language Model", 
+        "Software Testing", 
+        "LLM", 
+        "GPT"
+    ],
+    year: 2024,
+    categories: ["Survey", "Testing"],
+    citations: 464,
+    url: "https://arxiv.org/abs/2307.07221", 
+    artifactUrl: "https://github.com/LLM-Testing/LLM4SoftwareTesting", // No artifact mentioned
+    publication: "TSE", // Conference/journal not specified
+    ccfRank: "CCF-A" // Default (update if venue is known)
+  },
+  {
     id: "3",
     title: "IRIS: LLM-Assisted Static Analysis for Detecting Security Vulnerabilities",
     authors: ["Ziyang Li", "Salkat Dutta", "Mayur Naik"],
