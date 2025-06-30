@@ -33,7 +33,7 @@ export const seminars: Seminar[] = [
     ],
     references: [
       <a href=https://kaichen.org/vulrule target="_blank" rel="noopener noreferrer">
-      {linkText}
+      Vulrule网站
       </a>
       'Static Analysis Techniques for Vulnerability Detection',
       'Machine Learning Approaches to Code Security Assessment',
