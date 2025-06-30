@@ -146,7 +146,7 @@ export const SeminarDetailPage: React.FC = () => {
               {seminar.references?.map((ref, index) => (
                 <div key={index} className="flex items-center space-x-3 text-gray-300 hover:text-blue-300 transition-colors cursor-pointer">
                   <ExternalLink size={16} className="text-blue-400 flex-shrink-0" />
-                  <span>{ref}</span>
+                  {ref}
                 </div>
               ))}
             </div>
