@@ -249,7 +249,7 @@ export const PaperCollectionPage: React.FC = () => {
               >
                 <div className="text-center">
                   <div className="text-sm font-bold text-white">{yearData.year}</div>
-                  <div className="text-xs text-purple-300">({yearData.count})</div>
+                  <div className="text-xs text-purple-300">(# {yearData.count})</div>
                 </div>
               </div>
             );
