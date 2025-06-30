@@ -176,7 +176,7 @@ export const papers: Paper[] = [
     artifactUrl: undefined, // No artifact mentioned
     publication: "NDSS", // Network and Distributed System Security Symposium
     ccfRank: "CCF-A", // NDSS is CCF-A
-    seminar: 1
+    seminar: '1'
   }
   
 ];
