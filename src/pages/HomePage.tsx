@@ -17,7 +17,7 @@ export const HomePage: React.FC = () => {
           <div className="mb-8">
             <div className="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-2 mb-6">
               <Star className="text-blue-400" size={16} />
-              <span className="text-blue-300 text-sm font-medium">SQuARE Research Group</span>
+              <a href="https://new.square16.org/" target="_blank" rel="noopener noreferrer" className="text-blue-300 text-sm font-medium hover:text-blue-200 transition-colors">SQuARE Research Group</a>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -25,7 +25,7 @@ export const HomePage: React.FC = () => {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Large Language Models & Software Engineering Research Group
+              Large Language Models & Software Engineering Research Team
             </p>
             <p className="text-lg text-gray-400 max-w-2xl mx-auto">
               Record seminar notifications and important papers for LLM&SE research.
