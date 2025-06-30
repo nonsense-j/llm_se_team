@@ -2,10 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { Search, Star, Users, Calendar, ExternalLink, X, BookOpen } from 'lucide-react';
 import { papers, Paper, PAPER_CATEGORIES } from '../data/papers';
 
-const categories = ['All', ...PAPER_CATEGORIES];
-
 export const PaperCollectionPage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set(['All']));
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPaper, setSelectedPaper] = useState<Paper | null>(null);
   
@@ -19,7 +17,11 @@ export const PaperCollectionPage: React.FC = () => {
   const [selectedYears, setSelectedYears] = useState<Set<number>>(new Set(availableYears));
 
   const filteredPapers = papers.filter(paper => {
-    const matchesCategory = selectedCategory === 'All' || paper.categories.includes(selectedCategory);
+    // Category filtering with multi-select logic
+    const matchesCategory = selectedCategories.has('All') || 
+                           selectedCategories.has('Starred') && paper.starred ||
+                           paper.categories.some(category => selectedCategories.has(category));
+    
     const matchesSearch = paper.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          paper.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          paper.categories.some(category => category.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -125,6 +127,54 @@ export const PaperCollectionPage: React.FC = () => {
     setSelectedYears(new Set());
   };
 
+  // Handle category selection with multi-select logic
+  const handleCategorySelect = (category: string) => {
+    const newSelectedCategories = new Set(selectedCategories);
+    
+    if (category === 'All') {
+      // If "All" is clicked, clear everything and select only "All"
+      setSelectedCategories(new Set(['All']));
+    } else {
+      // Remove "All" if it's selected and we're selecting a specific category
+      if (newSelectedCategories.has('All')) {
+        newSelectedCategories.delete('All');
+      }
+      
+      // Toggle the clicked category
+      if (newSelectedCategories.has(category)) {
+        newSelectedCategories.delete(category);
+      } else {
+        newSelectedCategories.add(category);
+      }
+      
+      // If no categories are selected, default back to "All"
+      if (newSelectedCategories.size === 0) {
+        newSelectedCategories.add('All');
+      }
+      
+      setSelectedCategories(newSelectedCategories);
+    }
+  };
+
+  // Get button style based on selection state
+  const getButtonStyle = (category: string) => {
+    const isSelected = selectedCategories.has(category);
+    
+    if (category === 'All') {
+      return isSelected
+        ? 'bg-purple-500 text-white'
+        : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50';
+    } else if (category === 'Starred') {
+      return isSelected
+        ? 'bg-red-500 text-white'
+        : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50';
+    } else {
+      return isSelected
+        ? 'bg-blue-500 text-white'
+        : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50';
+    }
+  };
+
   return (
     <div className="min-h-screen pt-8 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -153,15 +203,29 @@ export const PaperCollectionPage: React.FC = () => {
             />
           </div>
           <div className="flex flex-wrap justify-center gap-2">
-            {categories.map(category => (
+            {/* All button */}
+            <button
+              onClick={() => handleCategorySelect('All')}
+              className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${getButtonStyle('All')}`}
+            >
+              All
+            </button>
+            
+            {/* Starred button */}
+            <button
+              onClick={() => handleCategorySelect('Starred')}
+              className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors flex items-center space-x-1 ${getButtonStyle('Starred')}`}
+            >
+              <Star size={16} className={selectedCategories.has('Starred') ? 'fill-current' : ''} />
+              <span>Starred</span>
+            </button>
+            
+            {/* Category buttons */}
+            {PAPER_CATEGORIES.map(category => (
               <button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-purple-500 text-white'
-                    : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700/50'
-                }`}
+                onClick={() => handleCategorySelect(category)}
+                className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${getButtonStyle(category)}`}
               >
                 {category}
               </button>
