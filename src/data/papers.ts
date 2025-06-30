@@ -175,7 +175,7 @@ export const papers: Paper[] = [
     url: "https://dx.doi.org/10.14722/ndss.2025.230816",
     artifactUrl: undefined, // No artifact mentioned
     publication: "NDSS", // Network and Distributed System Security Symposium
-    ccfRank: "CCF-A" // NDSS is CCF-A
+    ccfRank: "CCF-A", // NDSS is CCF-A
     seminar: 1
   }
   
