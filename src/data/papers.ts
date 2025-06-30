@@ -59,7 +59,7 @@ export const papers: Paper[] = [
         "Song Wang", 
         "Qing Wang"
     ],
-    institute: "Institute of Software Chinese Academy of Sciences; University of Chinese Academy of Sciences; Monash University; York University",
+    institute: "ISCAS; Monash University; York University",
     abstract: "This survey paper explores the application of Large Language Models (LLMs) in software testing, analyzing 102 studies that leverage LLMs for tasks like test case preparation and program repair. The authors examine the intersection of LLMs and software testing from dual perspectives, detailing commonly used models (e.g., GPT, T5), prompt engineering techniques, and auxiliary methods. As software systems grow in complexity, traditional testing approaches face limitations in coverage and semantic understanding, which LLMs address through their scalability and NLP capabilities. The paper identifies key challenges and opportunities, serving as a roadmap for future research in LLM-driven testing innovation.",
     keywords: [
         "Pre-trained Large Language Model", 
@@ -121,17 +121,46 @@ export const papers: Paper[] = [
     id: '5',
     title: "Generating API Parameter Security Rules with LLM for API Misuse Detection",
     authors: ["Jinghua Liu", "Yi Yang", "Kai Chen", "Miaoqian Lin"],
-    institute: "Institute of Information Engineering, Chinese Academy of Sciences, China",
+    institute: "IIE CAS",
     abstract: "This paper addresses the challenge of automatically generating API Parameter Security Rules (APSRs) to detect API misuse, which can lead to severe security issues like null pointer dereference and memory corruption. Existing methods suffer from missing information and limited heuristics. The authors propose GPTAid, a framework leveraging Large Language Models (LLMs) to analyze API source code and generate APSRs. GPTAid employs execution feedback-checking to validate generated APSRs by dynamically executing violation code and filtering incorrect rules. It further refines APSRs through code differential analysis to ensure precision. Evaluated on 200 APIs from eight popular libraries, GPTAid achieves 92.3% precision and generates 6 times more APSRs than state-of-the-art detectors. Additionally, it discovered 210 unknown security bugs in 47 applications, with 150 confirmed by developers.",
     keywords: ["API Misuse", "API Parameter Security Rules", "Large Language Models"],
-    year: 2025, // Assuming current year based on submission context
+    year: 2025,
     categories: ["Security", "Analysis"],
     citations: 7,
     url: "https://www.ndss-symposium.org/ndss-paper/generating-api-parameter-security-rules-with-llm-for-api-misuse-detection/",
-    artifactUrl: "https://github.com/icy17/GPTAid/", // No artifact URL provided
+    artifactUrl: "https://github.com/icy17/GPTAid/", 
     publication: "NDSS", 
     ccfRank: "CCF-A"
   },
-  
+  {
+    id: '6',
+    title: "Uncovering the iceberg from the tip: Generating API Specifications for Bug Detection via Specification Propagation Analysis",
+    authors: ["Miaoqian Lin", "Kai Chen", "Yi Yang", "Jinghua Liu"],
+    institute: "IIE CAS",
+    abstract: "This paper addresses the challenge of detecting API misuse bugs caused by incomplete API specifications. Existing methods extract specifications from documentation, usage patterns, or patches but suffer from coverage gaps. The authors propose API Specification Propagation – the observation that specifications propagate through hierarchical API call chains. They introduce APISpecGen, which starts with seed specifications and performs bidirectional propagation analysis to generate new specifications. APISpecGen combines API usage context and validates specifications via data-flow analysis, iteratively expanding coverage. Evaluated on Linux kernel APIs, APISpecGen generated 7,332 specifications from just 6 seeds, detecting 186 new bugs (113 confirmed by developers, 8 assigned CVEs). This significantly outperforms state-of-the-art specification extraction methods.",
+    keywords: ["API Specifications", "Bug Detection", "API Misuse", "Data-flow Analysis"],
+    year: 2025, 
+    categories: ["Security", "Analysis"],
+    citations: 0, // Placeholder (update if known)
+    url: "https://www.ndss-symposium.org/ndss-paper/uncovering-the-iceberg-from-the-tip-generating-api-specifications-for-bug-detection-via-specification-propagation-analysis/", // No URL provided
+    artifactUrl: undefined, // No artifact mentioned
+    publication: "NDSS", // Conference/journal not specified
+    ccfRank: "CCF-A" // Default (update if venue known)
+  },
+  {
+    id: '7',
+    title: "AURC: Detecting Errors in Program Code and Documentation",
+    authors: ["Pelwei Hu", "Ruigang Liang", "Ying Cao", "Kai Chen", "Runze Zhang"],
+    institute: "IIE CAS; BAAI",
+    abstract: "This paper addresses limitations in existing vulnerability detection methods that either assume documentation correctness or rely on majority voting, leading to missed bugs when documentation is defective or correct usage is rare. The authors propose AURC, a static framework that mutually corroborates three objects: API documentation, caller code (API-invoking code), and callee code (API source code). AURC combines context-sensitive backward analysis for callee processing, a pretrained document classifier, and caller condition collection to cross-validate results. This eliminates dependency on documentation assumptions or usage frequency. Evaluated on ten codebases, AURC discovered 529 security bugs (e.g., heap buffer overflow) and 224 documentation defects, with 222 code patches and 76 documentation patches accepted by maintainers.",
+    keywords: ["Error Detection", "Code Bugs", "Document Defects", "Static Analysis", "API Invocation"],
+    year: 2023, // USENIX Security '23
+    categories: ["Security", "Analysis"],
+    citations: 0, // Placeholder (update if known)
+    url: undefined, // No direct paper link provided
+    artifactUrl: undefined, // No artifact mentioned
+    publication: "USENIX Security", // Explicitly mentioned
+    ccfRank: "CCF-A" // USENIX Security is CCF-A
+}
   
 ];
