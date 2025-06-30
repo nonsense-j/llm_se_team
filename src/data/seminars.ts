@@ -36,12 +36,7 @@ export const seminars: Seminar[] = [
       'CodeT5: Identifier-aware Unified Pre-trained Encoder-Decoder Models',
       'GitHub Copilot技术报告'
     ],
-    additionalNotes: [
-      '论文阅读说明：研讨会论文只需要通读，重点在于理解论文处理什么任务，用了什么特别的方法',
-      '论文分享要求：围绕动机、任务、方法总览、重点实验结果大致介绍。分享形式不限，可以自己制作精简PPT、使用论文PPT、直接使用论文或者阅读笔记文档',
-      '讨论参与：鼓励大家积极提问和分享自己的见解，营造良好的学术讨论氛围',
-      '时间安排：每人分享时间控制在15-20分钟，留出充足时间进行讨论'
-    ]
+    additionalNotes: addNotes
   },
   {
     id: '2',
@@ -61,10 +56,6 @@ export const seminars: Seminar[] = [
       'Deep Learning for Vulnerability Detection: A Survey',
       'Static Analysis Tools Comparison Report'
     ],
-    additionalNotes: [
-      '论文阅读说明：重点关注论文中提到的检测方法和实验设计',
-      '技术准备：建议提前了解相关的静态分析工具，如SonarQube、Checkmarx等',
-      '案例分析：准备1-2个实际的漏洞检测案例进行讨论'
-    ]
+    additionalNotes: addNotes
   }
 ];
