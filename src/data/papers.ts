@@ -96,7 +96,7 @@ export const papers: Paper[] = [
     ],
     year: 2024,
     categories: ["Survey", "Code Generation", "Testing", "Security", "Maintenance", "Analysis"],
-    citations: 0, // Placeholder for a newly published survey
+    citations: 73, // Placeholder for a newly published survey
     url: "https://arxiv.org/abs/2409.02977",
     artifactUrl: "https://github.com/FudanSELab/Agent4SE-Paper-List",
     publication: "Arxiv", // Conference/journal not specified
@@ -161,6 +161,22 @@ export const papers: Paper[] = [
     artifactUrl: "https://github.com/PeiweiHu/AURC", // No artifact mentioned
     publication: "USENIX Security", // Explicitly mentioned
     ccfRank: "CCF-A" // USENIX Security is CCF-A
-}
+  },
+  {
+    id: '8',
+    title: "The Midas Touch: Triggering the Capability of LLMs for RM-API Misuse Detection",
+    authors: ["Yi Yang", "Jinghua Liu", "Kai Chen", "Miaoqian Lin"],
+    institute: "IIE CAS",
+    abstract: "This paper addresses the challenge of detecting Resource Management API (RM-API) misuse, where traditional pattern-matching methods fail due to incomplete documentation coverage and incorrect usage patterns. The authors propose ChadDetector, an LLM-based framework that automates constraint retrieval and misuse detection. To overcome LLM hallucinations, ChadDetector decomposes tasks into allocation API identification, RM-object extraction, and API pairing using a ReAct-inspired approach. It employs two-dimensional prompting for cross-validation and inconsistency-checking against NLP tools. Evaluated on six libraries, ChadDetector achieved 98.21% precision in identifying 165 RM-API pairs and detected 115 security bugs (e.g., DoS, memory corruption), retrieving 47% more RM sentences and 80.85% more constraints than benchmarks.",
+    keywords: ["RM-API Misuse", "Large Language Models", "Resource Management", "Bug Detection", "Static Analysis"],
+    year: 2025, // NDSS Symposium 2025
+    categories: ["Security"],
+    citations: 0, // New publication
+    url: "https://dx.doi.org/10.14722/ndss.2025.230816",
+    artifactUrl: undefined, // No artifact mentioned
+    publication: "NDSS", // Network and Distributed System Security Symposium
+    ccfRank: "CCF-A" // NDSS is CCF-A
+    seminar: 1
+  }
   
 ];
