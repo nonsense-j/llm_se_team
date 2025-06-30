@@ -33,20 +33,20 @@ export const papers: Paper[] = [
         "Jianguo Li", 
         "Rui Wang"
     ],
-    institute: "Shanghai Jiao Tong University; Ant Group", // No affiliation mentioned in the provided text
+    institute: "Shanghai Jiao Tong University; Ant Group", 
     abstract: "This survey paper systematically reviews advancements in applying language models (LMs) to software engineering (SE), covering 70+ models, 40+ tasks, 180+ datasets, and 900+ works. It bridges SE and NLP perspectives: SE uses LMs for development automation, while NLP leverages SE tasks for LM evaluation. The authors categorize code-processing models into general-purpose (e.g., GPT) and code-specialized LMs, tracing their evolution from statistical models/RNNs to pretrained Transformers/LLMs. Beyond coding, the survey explores LLM applications in requirement engineering, testing, deployment, and operations, providing a holistic view of NLP in SE. Key challenges and future directions are identified.",
     keywords: [
         "Large Language Models", 
         "NLP4SE", 
         "SE4NLP"
     ],
-    year: 2024, // Based on "Last Modified: 18 Sept 2024"
-    categories: ["Survey", "Code Generation", "Testing"],
-    citations: 0, // Assuming pre-print (update if known)
+    year: 2024,
+    categories: ["Survey", "Code Generation", "Testing", "Security", "Analysis"],
+    citations: 84, // Assuming pre-print (update if known)
     url: "https://github.com/codefuse-ai/Awesome-Code-LLM", // Placeholder (no DOI/publisher link provided)
     artifactUrl: "https://github.com/codefuse-ai/Awesome-Code-LLM",
-    publication: "TMLR", // Accepted by Transactions on Machine Learning Research
-    ccfRank: "CCF-N" // TMLR is not in CCF rankings
+    publication: "TMLR",
+    ccfRank: "CCF-N"
   },
   {
     id: "3",
