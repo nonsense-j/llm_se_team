@@ -39,5 +39,24 @@ export const seminars: Seminar[] = [
       { name: 'GPTAid | Generating API Parameter Security Rules with LLM for API Misuse Detection', url: 'https://www.ndss-symposium.org/ndss-paper/generating-api-parameter-security-rules-with-llm-for-api-misuse-detection/' }
     ],
     additionalNotes: addNotes
+  },
+  {
+    id: '2',
+    title: '华为软工专项基金指南讨论',
+    date: '2025-07-09',
+    time: '14:00 - 18:00',
+    participant: 'LLM&SE全员',
+    location: '337会议室',
+    description: '围绕华为CCF-华为胡杨林基金软件工程专题2025年度申报课题展开讨论，了解工业界当前科研关注点。',
+    preparation: [
+      '指南了解（全体成员）：下载指南说明材料，大致过一下各类课题，了解工业界关注的软工前沿关键问题',
+      '特定课题讨论（全体成员）：重点关注A2课题（智能化代码缺陷检测技术）头脑风暴，结合已有工作和文献思考我们可以做什么，方便后续讨论'
+    ],
+    references: [
+      { name: '启动申报微信公众号推文', url: 'https://mp.weixin.qq.com/s/BgQbSCCqi12wIWxbuU_AUg' },
+      { name: '启动申报CCF官网推文', url: 'https://www.ccf.org.cn/Collaboration/Enterprise_Fund/News/hw/2025-07-04/846139.shtml?sessionid='},
+      { name: 'PDF - 指南说明材料下载', url: 'https://www.ccf.org.cn/ccf/contentcore/resource/download?ID=8B0EFE09E563C34477C358833AB000593D7BBB4DB837FB06E57C395E995CE836'},
+      ],
+    additionalNotes: addNotes
   }
 ];
