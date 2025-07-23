@@ -58,5 +58,22 @@ export const seminars: Seminar[] = [
       { name: 'PDF - 指南说明材料下载', url: 'https://www.ccf.org.cn/ccf/contentcore/resource/download?ID=8B0EFE09E563C34477C358833AB000593D7BBB4DB837FB06E57C395E995CE836'},
       ],
     additionalNotes: addNotes
+  },
+  {
+    id: '3',
+    title: '图神经网络应用于LLM&SE相关研究讨论',
+    date: '2025-07-23',
+    time: '14:00 - 18:00',
+    participant: 'LLM&SE全员',
+    location: '337会议室',
+    description: '高航师兄会简单介绍一下图神经网络在LLM&SE相关领域中的应用，主要包括：图神经网络技术，图神经网络与LLM的代码漏洞识别，基于图的LLM的推理增强。大家可以一起讨论看看能不能结合着做一些SE领域其它的任务。',
+    preparation: [
+      '参与讨论的同学可以先了解一下GNN的相关基础知识',
+      '也可以提前看一下高航师兄GNN+LLM的相关论文'
+    ],
+    references: [
+      { name: '高航师兄的谷歌学术主页', url: 'https://scholar.google.com/citations?hl=zh-CN&user=gkK0P_kAAAAJ&view_op=list_works&sortby=pubdate' },
+    ],
+    additionalNotes: addNotes
   }
 ];
